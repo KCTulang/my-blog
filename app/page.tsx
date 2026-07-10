@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 
 export default async function Home() {
+	// Fetch live posts from Neon Postgres ordered by newest first
 	const posts = await db.query.posts.findMany({
 		orderBy: (posts, { desc }) => [desc(posts.createdAt)],
 		with: {
@@ -9,58 +10,75 @@ export default async function Home() {
 	});
 
 	return (
-		<div className="pt-20 flex flex-col flex-1 items-center bg-zinc-50 font-sans dark:bg-black min-h-screen">
-			<main className="flex flex-1 w-full max-w-3xl flex-col py-32 px-16 bg-white dark:bg-black sm:items-start">
-				<h1 className="text-6xl font-bold text-black dark:text-white sm:text-5xl">
-					Loonary: A moonlit digital diary.
+		<div className="pt-20 flex flex-col flex-1 items-center min-h-screen">
+			<main className="flex flex-1 w-full max-w-3xl flex-col py-24 px-6 sm:px-16 sm:items-start">
+				<h1 className="text-4xl font-bold font-serif text-[#f8f9fa] tracking-tight sm:text-5xl md:text-6xl">
+					Loonary
 				</h1>
+				<p className="mt-3 text-lg font-sans font-light text-zinc-400">
+					A moonlit digital diary.
+				</p>
 
-				<div className="mt-16 w-full flex flex-col gap-12">
+				{/* Main Dynamic Blog Feed Grid */}
+				<div className="mt-16 w-full flex flex-col gap-10">
 					{posts.length === 0 ? (
-						<p className="text-zinc-500">No stories under the moonlight yet.</p>
+						<p className="text-zinc-500 font-sans italic">
+							No stories under the moonlight yet.
+						</p>
 					) : (
 						posts.map((post) => (
 							<article
 								key={post.id}
-								className="border-b border-zinc-200 dark:border-zinc-800 pb-8"
+								// Translucent glassmorphic container
+								className="bg-white/20 backdrop-blur-md border border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-6 sm:p-8 rounded-2xl transition-all duration-300 hover:border-white/40 hover:bg-white/20"
 							>
-								<h2 className="text-3xl font-serif text-black dark:text-white mb-2">
+								{/* Post Title */}
+								<h2 className="text-2xl sm:text-3xl font-serif text-[#f8f9fa] mb-3 leading-snug">
 									{post.title}
 								</h2>
-								<p className="text-zinc-600 dark:text-zinc-400 font-light">
+
+								{/* Post Body Paragraph Fragment */}
+								<p className="text-zinc-300 font-sans font-light leading-relaxed text-sm sm:text-base">
 									{post.body.length > 200
 										? `${post.body.substring(0, 200)}...`
 										: post.body}
 								</p>
-								<span className="text-sm text-zinc-400 mt-4 block">
-									{new Date(post.createdAt).toLocaleDateString()}
+
+								{/* Timestamp */}
+								<span className="text-xs font-sans text-zinc-500 mt-4 block uppercase tracking-wider">
+									{new Date(post.createdAt).toLocaleDateString(undefined, {
+										year: "numeric",
+										month: "long",
+										day: "numeric",
+									})}
 								</span>
 
-								<div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-900">
-									<h3 className="text-sm font-medium text-black dark:text-white mb-4 uppercase tracking-wider">
+								{/* Translucent Inline Comment Block Shell */}
+								<div className="mt-6 pt-6 border-t border-white/6">
+									<h3 className="text-xs font-semibold font-sans text-[#f8f9fa]/80 mb-4 uppercase tracking-widest">
 										Comments ({post.comments.length})
 									</h3>
 
 									{post.comments.length === 0 ? (
-										<p className="text-sm text-zinc-500 italic">
+										<p className="text-xs text-zinc-500 font-sans italic">
 											Be the first to leave a thought.
 										</p>
 									) : (
-										<ul className="space-y-4">
+										<ul className="space-y-3">
 											{post.comments.map((comment) => (
 												<li
 													key={comment.id}
-													className="bg-zinc-100 dark:bg-zinc-900/50 p-4 rounded-lg"
+													className="bg-white/20 border border-white/3 p-4 rounded-xl"
 												>
-													<div className="flex justify-between items-center mb-2">
-														<span className="font-semibold text-sm text-black dark:text-zinc-200">
+													<div className="flex justify-between items-center mb-1">
+														<span className="font-medium text-xs sm:text-sm text-[#f8f9fa]">
 															{comment.authorName}
 														</span>
-														<span className="text-xs text-zinc-400">
+														<span className="text-[10px] text-zinc-500 font-sans">
 															{new Date(comment.createdAt).toLocaleDateString()}
 														</span>
 													</div>
-													<p className="text-sm text-zinc-700 dark:text-zinc-400">
+													<p className="text-xs sm:text-sm font-sans font-light text-zinc-400">
 														{comment.body}
 													</p>
 												</li>
@@ -68,7 +86,6 @@ export default async function Home() {
 										</ul>
 									)}
 								</div>
-								{/* --- END COMMENTS SECTION --- */}
 							</article>
 						))
 					)}

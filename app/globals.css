@@ -1,13 +1,17 @@
 @import "tailwindcss";
 
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
+	--background-start: #0a0f1e;
+	--background-end: #050810;
+	--foreground: #f8f9fa;
 }
 
 @theme inline {
-	--color-background: var(--background);
+	--color-bg-start: var(--background-start);
+	--color-bg-end: var(--background-end);
 	--color-foreground: var(--foreground);
+	--color-off-white: #f8f9fa;
+
 	--font-sans: var(--font-inter), sans-serif;
 	--font-serif: var(--font-lora), serif;
 }
@@ -21,8 +25,13 @@
 
 @layer base {
 	body {
-		background: var(--background);
+		background: linear-gradient(
+			to bottom,
+			var(--background-start),
+			var(--background-end)
+		);
 		color: var(--foreground);
+		min-height: 100vh;
 		/* font Inter for all normal text*/
 		font-family: var(--font-inter), sans-serif;
 	}

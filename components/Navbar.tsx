@@ -1,13 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
-	{ name: "All Stories", path: "/" },
-	{ name: "About Loonary", path: "/about" },
-	{ name: "Contact", path: "/contact" },
+	{ name: "Stories", path: "/" },
+	{ name: "About", path: "/about" },
 ];
 
 const TRANSITION =
@@ -30,20 +30,19 @@ export default function Navbar() {
 		isScrolled ? "top-4 w-[calc(100%-2rem)] max-w-3xl" : "top-0 w-full"
 	}`;
 
-	const navClasses = `flex w-full flex-col items-center justify-between bg-white/80 backdrop-blur-md text-zinc-900 md:flex-row dark:bg-black/80 dark:text-zinc-100 ${TRANSITION} ${
+	const navClasses = `flex w-full flex-col items-center justify-between backdrop-blur-md text-[--color-off-white] md:flex-row ${TRANSITION} ${
 		isScrolled
-			? "rounded-2xl px-6 py-2 shadow-lg border border-zinc-200 dark:border-zinc-800"
-			: "px-8 py-4 border-b border-zinc-100 dark:border-zinc-900"
+			? "rounded-2xl px-6 py-2 shadow-lg bg-white/2 border border-white/5 bg-transparent"
+			: "px-8 py-4 shadow-[0_1px_0_0_rgba(255,255,255,0.02),0_0_5px_0_rgba(255,255,255,0.20)] bg-transparent"
 	}`;
 
 	const getLinkClasses = (isActive: boolean) => {
 		const baseClasses =
-			"block rounded-full px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all duration-300";
-		// Using a soft "lunar" blue/indigo accent instead of crimson
+			"block rounded-full px-4 py-2 text-xs font-bold font-serif tracking-tight transition-all duration-300";
 		const activeClasses =
-			"bg-indigo-500/10 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-300";
+			"bg-white/6 text-[--color-off-white] border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.70)]";
 		const inactiveClasses =
-			"text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100";
+			"text-zinc-400 hover:bg-white/8 hover:text-[--color-off-white]";
 
 		return `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
 	};
@@ -58,14 +57,20 @@ export default function Navbar() {
 							closeMenu();
 							window.scrollTo({ top: 0, behavior: "smooth" });
 						}}
-						className="text-lg font-serif font-bold tracking-tight"
+						className="flex items-center gap-2 hover:opacity-80 transition-opacity"
 					>
-						Loonary
+						<Image
+							src="/loonary.svg?v=2"
+							alt="Loonary Logo"
+							width={70}
+							height={70}
+							priority
+						/>
 					</Link>
 
 					<button
 						type="button"
-						className="p-2 md:hidden"
+						className="p-2 md:hidden text-zinc-400"
 						onClick={() => setIsMenuOpen((prev) => !prev)}
 					>
 						{isMenuOpen ? "✕" : "☰"}
