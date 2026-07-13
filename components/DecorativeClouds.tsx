@@ -1,0 +1,81 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+export default function DecorativeClouds({
+	animated = true,
+}: {
+	animated?: boolean;
+}) {
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) return null;
+
+	return (
+		<div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+			{/* Cloud A — top-right: larger and positioned mid-right, not pinned to very top */}
+			<div
+				aria-hidden="true"
+				className={`cloud-tr absolute right-[-5%] top-[12%]
+					w-44 opacity-75
+					sm:right-0 sm:top-[8%] sm:w-52 sm:opacity-80
+					md:w-64
+					lg:top-0 lg:right-0 lg:w-140 lg:opacity-90
+					${animated ? "animate-float-cloud-1" : ""}`}
+			>
+				<Image
+					loading="eager"
+					src="/Cloud.svg"
+					alt=""
+					width={420}
+					height={210}
+					className="h-auto w-full opacity-60"
+				/>
+			</div>
+
+			{/* Cloud B — mid-left on mobile (not bottom), bottom-left on desktop */}
+			<div
+				aria-hidden="true"
+				className={`absolute
+					top-[48%] left-[-18%] w-52 opacity-55
+					sm:top-[45%] sm:left-[-16%] sm:w-64 sm:opacity-55
+					md:w-80 md:opacity-55
+					lg:top-auto lg:bottom-[-10%] lg:left-[-10%] lg:w-180 lg:opacity-60
+					${animated ? "animate-float-cloud-2" : ""}`}
+			>
+				<Image
+					loading="eager"
+					src="/Cloud.svg"
+					alt=""
+					width={520}
+					height={260}
+					className="h-auto w-full"
+				/>
+			</div>
+
+			{/* Cloud C — bottom-right, kept above the footer */}
+			<div
+				aria-hidden="true"
+				className={`absolute
+					bottom-[14%] right-[-8%] w-44 opacity-70
+					sm:bottom-[10%] sm:right-[-6%] sm:w-56 sm:opacity-75
+					md:w-72
+					lg:bottom-[-10%] lg:right-[-10%] lg:w-140 lg:opacity-90
+					${animated ? "animate-float-cloud-1" : ""}`}
+			>
+				<Image
+					src="/Cloud.svg"
+					alt=""
+					width={270}
+					height={135}
+					className="h-auto w-full opacity-60"
+				/>
+			</div>
+		</div>
+	);
+}

@@ -5,6 +5,7 @@ async function main() {
 	console.log("Seeding database...");
 
 	try {
+		// Use onConflictDoNothing so re-running seed is idempotent
 		const insertedPosts = await db
 			.insert(posts)
 			.values([
@@ -12,36 +13,50 @@ async function main() {
 					title: "Welcome to Loonary",
 					slug: "welcome-to-loonary-final",
 					body: "This is the very first post on my new moonlit digital diary. Inspired by my dog Loona, and built for sharing stories.",
+					tags: ["personal", "intro"],
 				},
 				{
 					title: "The Phases of the Moon",
 					slug: "phases-of-the-moon",
 					body: "Just like the moon, we go through phases. Today I want to write about embracing change and the beauty of starting over.",
+					tags: ["personal", "reflection"],
 				},
 				{
 					title: "Building a Full-Stack Blog",
 					slug: "building-full-stack-blog",
 					body: "This week I started a 10-day sprint to build this very blog using Next.js, Neon Postgres, and Drizzle ORM!",
+					tags: ["tech", "nextjs"],
 				},
 			])
+			.onConflictDoNothing()
 			.returning();
 
-		console.log("3 Posts created successfully!");
+		console.log(
+			`${insertedPosts.length} post(s) inserted (skipped duplicates).`,
+		);
 
-		await db.insert(comments).values([
-			{
-				postId: insertedPosts[0].id,
-				authorName: "Admin",
-				body: "Testing the brand new comments section!",
-			},
-			{
-				postId: insertedPosts[2].id,
-				authorName: "Next.js Fan",
-				body: "Good luck on your 10-day sprint!",
-			},
-		]);
+		if (insertedPosts.length > 0) {
+			await db
+				.insert(comments)
+				.values([
+					{
+						postId: insertedPosts[0].id,
+						authorName: "Admin",
+						body: "Testing the brand new comments section!",
+						approved: true, // pre-approved seed comments are visible immediately
+					},
+					{
+						postId: insertedPosts[2].id,
+						authorName: "Next.js Fan",
+						body: "Good luck on your 10-day sprint!",
+						approved: true,
+					},
+				])
+				.onConflictDoNothing();
 
-		console.log("Comments created successfully!");
+			console.log("Seed comments inserted.");
+		}
+
 		console.log("Database seeding complete!");
 		process.exit(0);
 	} catch (error) {
