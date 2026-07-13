@@ -6,7 +6,7 @@ config({ path: ".env.local" });
 // biome-ignore lint/style/noNonNullAssertion: guaranteed by environment
 const sql = neon(process.env.DATABASE_URL!);
 
-async function runSQL() {
+async function runSql() {
 	console.log("Running direct SQL...");
 	await sql`
 		CREATE TABLE IF NOT EXISTS "auth_attempts" (
@@ -30,7 +30,7 @@ async function runSQL() {
 	console.log("Complete!");
 }
 
-runSQL().catch((err) => {
+runSql().catch((err) => {
 	console.error(err);
 	process.exit(1);
 });

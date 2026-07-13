@@ -183,6 +183,7 @@ export default function AdminCommentList({
 					</div>
 
 					<ul className="flex flex-col gap-4">
+						{/* biome-ignore lint/complexity/noExcessiveCognitiveComplexity: UI component structure is complex */}
 						{filteredComments.map((comment) => (
 							<li
 								key={comment.id}
