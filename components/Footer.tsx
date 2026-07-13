@@ -5,8 +5,7 @@ export default function Footer() {
 				<div className="flex flex-col md:flex-row justify-between items-center gap-6">
 					<div className="w-full text-center md:text-left md:text-auto">
 						<p className="text-xs font-serif tracking-tight text-zinc-400">
-							© {new Date().getFullYear()} Kenneth Claire Tulang. All rights
-							reserved.
+							© 2026 Kenneth Claire Tulang. All rights reserved.
 						</p>
 					</div>
 
@@ -21,8 +20,6 @@ export default function Footer() {
 								Tailwind CSS
 							</span>
 						</p>
-
-						<span className="text-white/10 select-none">|</span>
 					</div>
 				</div>
 			</div>

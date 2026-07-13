@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const NAV_LINKS = [
 	{ name: "Stories", path: "/blog" },
@@ -13,12 +13,40 @@ const NAV_LINKS = [
 export default function Navbar() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const pathname = usePathname();
+	const menuRef = useRef<HTMLDivElement>(null);
 
 	const closeMenu = () => setIsMenuOpen(false);
 
+	// Close drawer when route changes
+	// biome-ignore lint/correctness/useExhaustiveDependencies: close on route change
+	useEffect(() => {
+		closeMenu();
+	}, [pathname]);
+
+	// Close drawer on outside click
+	// biome-ignore lint/correctness/useExhaustiveDependencies: menuRef is stable
+	useEffect(() => {
+		if (!isMenuOpen) return;
+		function handleClick(e: MouseEvent) {
+			if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+				closeMenu();
+			}
+		}
+		document.addEventListener("mousedown", handleClick);
+		return () => document.removeEventListener("mousedown", handleClick);
+	}, [isMenuOpen]);
+
+	// Prevent body scroll while menu open
+	useEffect(() => {
+		document.body.style.overflow = isMenuOpen ? "hidden" : "";
+		return () => {
+			document.body.style.overflow = "";
+		};
+	}, [isMenuOpen]);
+
 	const getLinkClasses = (isActive: boolean) => {
 		const base =
-			"block rounded-full px-4 py-[6px] text-[13px] font-serif font-bold tracking-tight transition-all duration-200";
+			"block rounded-full px-5 py-3 text-[13px] font-serif font-bold tracking-tight transition-all duration-200";
 		const active =
 			"bg-white/[0.06] text-[--color-off-white] border border-white/[0.08] shadow-[0_4px_20px_0_rgba(0,0,0,0.50)]";
 		const inactive = "text-zinc-400 hover:text-[--color-off-white]";
@@ -26,8 +54,11 @@ export default function Navbar() {
 	};
 
 	return (
-		<header className="shadow-navbar fixed left-0 right-0 top-0 z-50 w-full">
-			<nav className="flex w-full items-center justify-between px-6 py-3 md:px-8 md:py-4 backdrop-blur-sm">
+		<header
+			ref={menuRef}
+			className="shadow-navbar fixed left-0 right-0 top-0 z-50 w-full"
+		>
+			<nav className="flex w-full items-center justify-between px-5 py-3 backdrop-blur-sm md:px-8 md:py-4">
 				{/* Logo */}
 				<Link
 					href="/"
@@ -61,12 +92,13 @@ export default function Navbar() {
 					))}
 				</div>
 
-				{/* Mobile hamburger */}
+				{/* Mobile hamburger — min 44×44px tap target */}
 				<button
 					type="button"
 					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
 					aria-expanded={isMenuOpen}
-					className="flex md:hidden items-center justify-center p-2 text-zinc-400 hover:text-white transition-colors"
+					aria-controls="mobile-menu"
+					className="flex md:hidden min-h-[44px] min-w-[44px] items-center justify-center text-zinc-400 hover:text-white transition-colors"
 					onClick={() => setIsMenuOpen((prev) => !prev)}
 				>
 					<svg
@@ -95,9 +127,14 @@ export default function Navbar() {
 				</button>
 			</nav>
 
-			{/* Mobile dropdown menu */}
-			{isMenuOpen && (
-				<div className="md:hidden flex flex-col items-center gap-1 pb-4 pt-1 backdrop-blur-sm">
+			{/* Mobile dropdown — animated slide-down */}
+			<div
+				id="mobile-menu"
+				className={`md:hidden overflow-hidden transition-all duration-200 ease-out backdrop-blur-sm
+					${isMenuOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}
+				aria-hidden={!isMenuOpen}
+			>
+				<div className="flex flex-col items-stretch gap-1 px-5 pb-4 pt-1">
 					{NAV_LINKS.map(({ name, path }) => (
 						<Link
 							key={name}
@@ -109,7 +146,7 @@ export default function Navbar() {
 						</Link>
 					))}
 				</div>
-			)}
+			</div>
 		</header>
 	);
 }

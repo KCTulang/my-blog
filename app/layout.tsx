@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 
 const lora = Lora({
 	subsets: ["latin"],
@@ -29,9 +27,7 @@ export default function RootLayout({
 			<body
 				className={`${inter.variable} ${lora.variable} antialiased flex min-h-screen flex-col`}
 			>
-				<Navbar />
 				{children}
-				<Footer />
 			</body>
 		</html>
 	);

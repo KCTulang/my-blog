@@ -101,7 +101,7 @@
 		min-height: 100vh;
 		/* font Inter for all normal text*/
 		font-family: var(--font-inter), sans-serif;
-		@apply bg-background text-foreground;
+		@apply text-foreground;
 	}
 
 	/* font Lora to all headings */
@@ -199,6 +199,98 @@
 	.cloud-br {
 		transform: translate(8%, 18%);
 	}
+
+	/* Tag pills — filter bar + post card badges (Stretch #12) */
+	.tag-pill {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.75rem;
+		border-radius: 9999px;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(255, 255, 255, 0.05);
+		color: rgba(255, 255, 255, 0.55);
+		font-size: 0.75rem;
+		font-weight: 500;
+		transition: all 0.15s ease;
+		text-decoration: none;
+	}
+
+	.tag-pill:hover {
+		border-color: rgba(255, 255, 255, 0.25);
+		background: rgba(255, 255, 255, 0.1);
+		color: rgba(255, 255, 255, 0.85);
+	}
+
+	.tag-pill-active {
+		border-color: rgba(176, 189, 214, 0.5);
+		background: rgba(176, 189, 214, 0.12);
+		color: #b0bdd6;
+	}
+
+	/* Smaller badge variant for post cards */
+	.tag-pill-sm {
+		padding: 0.125rem 0.5rem;
+		font-size: 0.6875rem;
+		pointer-events: none;
+	}
+
+	/* ── Animations ───────────────────────────────────────────────────────── */
+
+	@media (prefers-reduced-motion: no-preference) {
+		@keyframes float-y {
+			from {
+				transform: translateY(0px);
+			}
+			to {
+				transform: translateY(-12px);
+			}
+		}
+
+		@keyframes float-cloud {
+			from {
+				transform: translate(0px, 0px);
+			}
+			to {
+				transform: translate(-8px, -10px);
+			}
+		}
+
+		.animate-float-1 {
+			animation: float-y 4s ease-in-out infinite alternate;
+		}
+
+		.animate-float-2 {
+			animation: float-y 5.5s ease-in-out -2s infinite alternate;
+		}
+
+		.animate-float-3 {
+			animation: float-y 7s ease-in-out -4s infinite alternate;
+		}
+
+		.animate-float-cloud-1 {
+			animation: float-cloud 6s ease-in-out -1s infinite alternate;
+		}
+
+		.animate-float-cloud-2 {
+			animation: float-cloud 8s ease-in-out -3s infinite alternate;
+		}
+	}
+
+	/* Interactive subtle lift for cards */
+	.card-glass,
+	.card-glass-dim {
+		transition:
+			transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+			box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+
+	.card-glass:hover,
+	.card-glass-dim:hover {
+		transform: translateY(-2px);
+		box-shadow:
+			0 25px 65px rgba(0, 0, 0, 0.8),
+			0 0 0 0.5px rgba(255, 255, 255, 0.15) inset;
+	}
 }
 
 .dark {
@@ -233,4 +325,27 @@
 	--sidebar-accent-foreground: oklch(0.985 0 0);
 	--sidebar-border: oklch(1 0 0 / 10%);
 	--sidebar-ring: oklch(0.556 0 0);
+}
+
+/* Smooth scrolling — disabled for reduced-motion users */
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+/* Zero transitions for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		/* biome-ignore lint/complexity/noImportantStyles: requires override */
+		animation-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: requires override */
+		animation-iteration-count: 1 !important;
+		/* biome-ignore lint/complexity/noImportantStyles: requires override */
+		transition-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: requires override */
+		scroll-behavior: auto !important;
+	}
 }

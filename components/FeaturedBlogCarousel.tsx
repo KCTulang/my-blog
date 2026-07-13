@@ -32,7 +32,7 @@ export default function FeaturedBlogCarousel({
 	const [current, setCurrent] = useState(0);
 	const [count, setCount] = useState(0);
 
-	// Sync Embla state → React state
+	// Sync Embla state → React state and handle autoplay
 	useEffect(() => {
 		if (!api) return;
 		setCount(api.scrollSnapList().length);
@@ -40,8 +40,19 @@ export default function FeaturedBlogCarousel({
 
 		const onSelect = () => setCurrent(api.selectedScrollSnap());
 		api.on("select", onSelect);
+
+		// Autoplay interval
+		const interval = setInterval(() => {
+			if (api.canScrollNext()) {
+				api.scrollNext();
+			} else {
+				api.scrollTo(0);
+			}
+		}, 5000);
+
 		return () => {
 			api.off("select", onSelect);
+			clearInterval(interval);
 		};
 	}, [api]);
 
@@ -115,7 +126,7 @@ function PostCard({ post }: { post: BlogPost }) {
 			className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-[1.75rem] lg:rounded-[2rem]"
 			tabIndex={0}
 		>
-			<article className="card-glass relative z-10 rounded-[1.75rem] px-8 py-7 text-center transition-colors duration-200 lg:rounded-[2rem] lg:px-10 lg:py-8">
+			<article className="card-glass relative z-10 rounded-[1.5rem] px-5 py-5 text-center transition-colors duration-200 sm:rounded-[1.75rem] sm:px-8 sm:py-7 lg:rounded-[2rem] lg:px-10 lg:py-8">
 				<h2
 					className="mb-2.5 font-serif font-semibold text-white
 						text-[17px] lg:text-[19px]
@@ -136,7 +147,7 @@ function PostCard({ post }: { post: BlogPost }) {
 
 export function PlaceholderCarousel() {
 	return (
-		<article className="card-glass relative z-10 rounded-[1.75rem] px-8 py-7 text-center lg:rounded-[2rem] lg:px-10 lg:py-8">
+		<article className="card-glass relative z-10 rounded-[1.5rem] px-5 py-5 text-center sm:rounded-[1.75rem] sm:px-8 sm:py-7 lg:rounded-[2rem] lg:px-10 lg:py-8">
 			<h2 className="mb-2.5 font-serif text-[17px] font-semibold text-white lg:text-[19px]">
 				Blog Title
 			</h2>
