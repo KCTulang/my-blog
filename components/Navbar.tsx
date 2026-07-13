@@ -46,10 +46,10 @@ export default function Navbar() {
 
 	const getLinkClasses = (isActive: boolean) => {
 		const base =
-			"block rounded-full px-5 py-3 text-[13px] font-serif font-bold tracking-tight transition-all duration-200";
+			"block text-center rounded-full px-5 py-3 text-[13px] font-serif font-bold tracking-tight transition-all duration-200";
 		const active =
-			"bg-white/[0.06] text-[--color-off-white] border border-white/[0.08] shadow-[0_4px_20px_0_rgba(0,0,0,0.50)]";
-		const inactive = "text-zinc-400 hover:text-[--color-off-white]";
+			"bg-white/[0.06] text-gold border border-white/[0.08] shadow-[0_4px_20px_0_rgba(0,0,0,0.50)]";
+		const inactive = "text-zinc-400 hover:text-off-white";
 		return `${base} ${isActive ? active : inactive}`;
 	};
 

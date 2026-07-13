@@ -47,6 +47,7 @@
 	--color-foreground: var(--foreground);
 	--color-off-white: #f8f9fa;
 	--color-light-blue: #b0bdd6;
+	--color-gold: #fbbf24;
 
 	--font-sans: var(--font-sans);
 	--font-serif: var(--font-lora), serif;

@@ -122,7 +122,7 @@ export default function Home() {
 							{/* Tooltip */}
 							<span
 								aria-hidden="true"
-								className="pointer-events-none absolute top-2 left-1/2 -translate-x-1/2
+								className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2
 									whitespace-nowrap rounded-full border border-white/15
 									bg-[#0d1526]/80 px-3 py-1 text-xs font-semibold text-white/80
 									opacity-0 backdrop-blur-sm transition-opacity duration-200
