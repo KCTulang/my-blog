@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import CommentForm from "@/components/CommentForm";
 import { db } from "@/lib/db";
 import { verifySession } from "@/lib/session";
@@ -133,7 +134,13 @@ export default async function PostPage({ params }: PostPageProps) {
 					<h2 className="mb-6 font-serif text-xl font-semibold text-white sm:text-2xl">
 						Comments
 					</h2>
-					<CommentList postId={post.id} />
+					<Suspense
+						fallback={
+							<div className="h-20 w-full animate-pulse rounded bg-white/5" />
+						}
+					>
+						<CommentList postId={post.id} />
+					</Suspense>
 				</section>
 
 				{/* Comment form */}
