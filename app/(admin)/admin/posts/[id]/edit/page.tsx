@@ -10,10 +10,6 @@ export const metadata: Metadata = {
 	robots: { index: false, follow: false },
 };
 
-// ── Dynamic island ─────────────────────────────────────────────────────────────
-// Params and the DB query are inside Suspense so they run at request time,
-// not at build-time prerender. This is the correct PPR pattern for dynamic routes.
-
 async function EditFormIsland({
 	paramsPromise,
 }: {

@@ -10,7 +10,7 @@ function SubmitButton() {
 		<button
 			type="submit"
 			disabled={pending}
-			className="mt-2 min-h-[44px] w-full rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+			className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
 		>
 			{pending ? "Authenticating…" : "Enter"}
 		</button>

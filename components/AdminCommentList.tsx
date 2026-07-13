@@ -130,7 +130,7 @@ export default function AdminCommentList({
 					<select
 						value={filterPost}
 						onChange={(e) => setFilterPost(e.target.value)}
-						className="max-w-[200px] rounded-xl border border-white/10 bg-[#0d1526] px-3 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-2 focus:ring-white/20"
+						className="max-w-50 rounded-xl border border-white/10 bg-[#0d1526] px-3 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-2 focus:ring-white/20"
 					>
 						<option value="all">All Posts</option>
 						{uniquePosts.map((p) => (
@@ -149,7 +149,7 @@ export default function AdminCommentList({
 						type="button"
 						onClick={handleBulkApprove}
 						disabled={selectedIds.size === 0}
-						className="min-h-[44px] rounded-lg border border-white/10 bg-white/5 px-3 text-sm font-medium text-white transition-colors hover:bg-white/15 disabled:opacity-50 sm:min-h-[36px]"
+						className="min-h-11 rounded-lg border border-white/10 bg-white/5 px-3 text-sm font-medium text-white transition-colors hover:bg-white/15 disabled:opacity-50 sm:min-h-9"
 					>
 						Approve
 					</button>
@@ -157,7 +157,7 @@ export default function AdminCommentList({
 						type="button"
 						onClick={handleBulkDelete}
 						disabled={selectedIds.size === 0}
-						className="min-h-[44px] rounded-lg border border-red-500/20 bg-red-500/10 px-3 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50 sm:min-h-[36px]"
+						className="min-h-11 rounded-lg border border-red-500/20 bg-red-500/10 px-3 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50 sm:min-h-9"
 					>
 						Delete
 					</button>
@@ -230,7 +230,7 @@ export default function AdminCommentList({
 										</div>
 
 										{/* Body */}
-										<p className="break-words text-sm font-light leading-relaxed text-zinc-300">
+										<p className="wrap-break-word text-sm font-light leading-relaxed text-zinc-300">
 											{comment.body}
 										</p>
 
@@ -242,14 +242,14 @@ export default function AdminCommentList({
 													onClick={() =>
 														handleToggleApprove(comment.id, comment.approved)
 													}
-													className="min-h-[36px] rounded border border-white/10 bg-white/5 px-3 text-xs font-medium text-white transition-colors hover:bg-white/15"
+													className="min-h-9 rounded border border-white/10 bg-white/5 px-3 text-xs font-medium text-white transition-colors hover:bg-white/15"
 												>
 													{comment.approved ? "Unapprove" : "Approve"}
 												</button>
 												<button
 													type="button"
 													onClick={() => handleDelete(comment.id)}
-													className="min-h-[36px] rounded border border-white/10 bg-white/5 px-3 text-xs font-medium text-red-400 transition-colors hover:bg-white/15"
+													className="min-h-9 rounded border border-white/10 bg-white/5 px-3 text-xs font-medium text-red-400 transition-colors hover:bg-white/15"
 												>
 													Delete
 												</button>
@@ -260,7 +260,7 @@ export default function AdminCommentList({
 															replyingTo === comment.id ? null : comment.id,
 														)
 													}
-													className="min-h-[36px] rounded border border-white/10 bg-white/5 px-3 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/15"
+													className="min-h-9 rounded border border-white/10 bg-white/5 px-3 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/15"
 												>
 													{replyingTo === comment.id ? "Cancel Reply" : "Reply"}
 												</button>
@@ -309,7 +309,7 @@ export default function AdminCommentList({
 												<div className="flex justify-end">
 													<button
 														type="submit"
-														className="min-h-[36px] rounded bg-white/15 px-4 text-xs font-medium text-white transition-colors hover:bg-white/25"
+														className="min-h-9 rounded bg-white/15 px-4 text-xs font-medium text-white transition-colors hover:bg-white/25"
 													>
 														Post Reply
 													</button>

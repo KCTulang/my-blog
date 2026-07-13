@@ -145,7 +145,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
 									{/* Footer row */}
 									<div className="mt-4 flex items-center justify-between">
-										<span className="min-h-[44px] flex items-center text-xs font-semibold text-white/50 transition-colors duration-200 group-hover:text-white/70">
+										<span className="min-h-11 flex items-center text-xs font-semibold text-white/50 transition-colors duration-200 group-hover:text-white/70">
 											Read more →
 										</span>
 										{/* PPR dynamic island: comment count fetched at request time */}
