@@ -98,7 +98,7 @@ export default function Navbar() {
 					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
 					aria-expanded={isMenuOpen}
 					aria-controls="mobile-menu"
-					className="flex md:hidden min-h-[44px] min-w-[44px] items-center justify-center text-zinc-400 hover:text-white transition-colors"
+					className="flex md:hidden min-h-11 min-w-11 items-center justify-center text-zinc-400 hover:text-white transition-colors"
 					onClick={() => setIsMenuOpen((prev) => !prev)}
 				>
 					<svg

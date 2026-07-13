@@ -54,7 +54,7 @@ export default function Home() {
 						width={864}
 						height={832}
 						priority
-						className="h-[30rem] w-auto sm:h-[34rem] md:h-[38rem] lg:h-[90vh] animate-float-2 pointer-events-none"
+						className="h-120 w-auto sm:h-136 md:h-152 lg:h-[90vh] animate-float-2 pointer-events-none"
 					/>
 				</section>
 
@@ -99,7 +99,7 @@ export default function Home() {
 					{/* Carousel + Loona Dog */}
 					<div
 						className="relative
-							w-full max-w-[300px]
+							w-full max-w-75
 							sm:max-w-85
 							lg:max-w-102"
 					>

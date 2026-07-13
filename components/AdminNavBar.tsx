@@ -79,8 +79,8 @@ export default function AdminNavBar() {
 								href={href}
 								className={`rounded-full px-4 py-2 text-[13px] font-medium transition-all duration-150 ${
 									isActive
-										? "bg-white/[0.08] text-white border border-white/10"
-										: "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
+										? "bg-white/8 text-white border border-white/10"
+										: "text-zinc-400 hover:text-zinc-200 hover:bg-white/4"
 								}`}
 							>
 								{label}
@@ -95,7 +95,7 @@ export default function AdminNavBar() {
 					<form action={logoutAction}>
 						<button
 							type="submit"
-							className="min-h-[36px] rounded-full px-4 py-2 text-[13px] font-medium text-red-400/70 transition-all duration-150 hover:bg-red-500/10 hover:text-red-300"
+							className="min-h-9 rounded-full px-4 py-2 text-[13px] font-medium text-red-400/70 transition-all duration-150 hover:bg-red-500/10 hover:text-red-300"
 						>
 							Log out
 						</button>
@@ -108,7 +108,7 @@ export default function AdminNavBar() {
 					aria-label={isOpen ? "Close menu" : "Open menu"}
 					aria-expanded={isOpen}
 					aria-controls="admin-mobile-menu"
-					className="flex sm:hidden min-h-[44px] min-w-[44px] items-center justify-center text-zinc-400 hover:text-white transition-colors"
+					className="flex sm:hidden min-h-11 min-w-11 items-center justify-center text-zinc-400 hover:text-white transition-colors"
 					onClick={() => setIsOpen((prev) => !prev)}
 				>
 					<svg
@@ -154,8 +154,8 @@ export default function AdminNavBar() {
 								onClick={() => setIsOpen(false)}
 								className={`rounded-xl px-4 py-3 text-sm font-medium transition-all duration-150 ${
 									isActive
-										? "bg-white/[0.08] text-white border border-white/10"
-										: "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
+										? "bg-white/8 text-white border border-white/10"
+										: "text-zinc-400 hover:text-zinc-200 hover:bg-white/4"
 								}`}
 							>
 								{label}

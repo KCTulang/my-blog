@@ -33,7 +33,7 @@ export default function AdminNav() {
 			<form action={logoutAction}>
 				<button
 					type="submit"
-					className="min-h-[44px] px-2 text-sm font-medium text-red-400/80 transition-colors hover:text-red-300"
+					className="min-h-11 px-2 text-sm font-medium text-red-400/80 transition-colors hover:text-red-300"
 				>
 					Log out
 				</button>

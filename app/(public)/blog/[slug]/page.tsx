@@ -38,7 +38,7 @@ async function CommentList({ postId }: { postId: string }) {
 						{c.authorName}
 					</p>
 					{/* break-words prevents long URLs / unspaced text from overflowing */}
-					<p className="break-words text-sm font-light leading-relaxed text-zinc-400">
+					<p className="wrap-break-word text-sm font-light leading-relaxed text-zinc-400">
 						{c.body}
 					</p>
 					<time
@@ -95,7 +95,7 @@ export default async function PostPage({ params }: PostPageProps) {
 				{/* Back link — min touch target via py-3 */}
 				<Link
 					href="/blog"
-					className="-ml-1 mb-8 inline-flex min-h-[44px] items-center gap-1 text-sm text-zinc-400 transition-colors duration-200 hover:text-white"
+					className="-ml-1 mb-8 inline-flex min-h-11 items-center gap-1 text-sm text-zinc-400 transition-colors duration-200 hover:text-white"
 				>
 					← All stories
 				</Link>
@@ -119,7 +119,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
 					{/* Post body — flat surface (no glass), intentional for readability */}
 					<div className="prose prose-invert prose-zinc max-w-none">
-						<p className="break-words text-base font-light leading-relaxed text-zinc-300 whitespace-pre-wrap">
+						<p className="wrap-break-word text-base font-light leading-relaxed text-zinc-300 whitespace-pre-wrap">
 							{post.body}
 						</p>
 					</div>

@@ -82,7 +82,7 @@ export default function AdminPostList({
 				</div>
 				<Link
 					href="/admin/posts/new"
-					className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-white/15 px-5 text-sm font-semibold text-white transition-colors hover:bg-white/25 sm:min-h-[36px]"
+					className="inline-flex min-h-11 items-center justify-center rounded-xl bg-white/15 px-5 text-sm font-semibold text-white transition-colors hover:bg-white/25 sm:min-h-[36px]"
 				>
 					+ New Post
 				</Link>
@@ -123,20 +123,20 @@ export default function AdminPostList({
 								<button
 									type="button"
 									onClick={() => handleToggle(post.id, post.published)}
-									className="min-h-[44px] rounded-lg border border-white/10 bg-white/5 px-3 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/15 sm:min-h-[36px]"
+									className="min-h-11 rounded-lg border border-white/10 bg-white/5 px-3 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/15 sm:min-h-[36px]"
 								>
 									{post.published ? "Unpublish" : "Publish"}
 								</button>
 								<Link
 									href={`/admin/posts/${post.id}/edit`}
-									className="min-h-[44px] rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/15 sm:min-h-[36px]"
+									className="min-h-11 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/15 sm:min-h-[36px]"
 								>
 									Edit
 								</Link>
 								<button
 									type="button"
 									onClick={() => handleDelete(post.id)}
-									className="min-h-[44px] rounded-lg border border-red-500/20 bg-red-500/10 px-3 text-xs font-medium text-red-400 transition-colors hover:bg-red-500/20 sm:min-h-[36px]"
+									className="min-h-11 rounded-lg border border-red-500/20 bg-red-500/10 px-3 text-xs font-medium text-red-400 transition-colors hover:bg-red-500/20 sm:min-h-[36px]"
 								>
 									Delete
 								</button>
