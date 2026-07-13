@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Loonary — A Moonlit Digital Blog
+
+A full-stack blog built with **Next.js 16**, **Neon Postgres**, **Drizzle ORM v2**, and **Tailwind CSS v4**.
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Database | Neon Postgres (serverless) |
+| ORM | Drizzle ORM v2 (`drizzle-orm/neon-http`) |
+| Styling | Tailwind CSS v4 + Vanilla CSS |
+| Validation | Zod v4 (`safeParse` in every Server Action) |
+| Linting | Biome |
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone & Install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/KCTulang/my-blog.git
+cd my-blog
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Database Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a free database at [neon.tech](https://neon.tech), then copy your connection string.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Create .env.local with your Neon connection string
+cp .env.local.example .env.local
+```
 
-## Learn More
+Edit `.env.local`:
+```
+DATABASE_URL="postgresql://..."
+ADMIN_PASSWORD="your-secret-password"
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Run Migrations
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+SQL migration files are committed in the `drizzle/` folder. Apply them with:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm drizzle-kit migrate
+```
 
-## Deploy on Vercel
+> **Note:** If `drizzle-kit migrate` hangs (Neon HTTP vs pg driver issue), run the manual apply script:
+> ```bash
+> pnpm tsx lib/db/apply-migration.ts
+> ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 4. Seed the Database
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Inserts 3 sample blog posts with tags and 2 pre-approved comments:
+
+```bash
+pnpm tsx lib/db/seed.ts
+```
+
+The seed is idempotent — re-running it won't create duplicates.
+
+### 5. Run Locally
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Admin Pages
+
+| URL | Description |
+|---|---|
+| `/admin/new` | Create a new blog post (password-protected) |
+| `/admin/comments` | Approve / unapprove reader comments |
+
+The `ADMIN_PASSWORD` env variable is used for both admin pages.
+
+---
+
+## Project Structure
+
+```
+app/
+  blog/
+    page.tsx          # Blog list — async Server Component, tag filtering
+    loading.tsx       # Skeleton for blog list
+    [slug]/
+      page.tsx        # Post detail + comments (approved only)
+      loading.tsx     # Skeleton for post page
+  admin/
+    new/page.tsx      # New post form
+    comments/page.tsx # Comment moderation
+
+components/
+  CommentForm.tsx     # "use client" — useActionState + useFormStatus
+  NewPostForm.tsx     # "use client" — useActionState + useFormStatus
+  ModerateButton.tsx  # "use client" — useActionState + useFormStatus
+
+lib/
+  actions.ts          # Server Actions: addComment, createPost, toggleCommentApproval
+  db/
+    index.ts          # Drizzle + Neon connection
+    schema.ts         # posts + comments tables with relations
+    seed.ts           # 3 sample posts + 2 approved comments
+
+drizzle/              # Committed SQL migration files (drizzle-kit generate)
+```
+
+---
+
+## Key Constraints Met
+
+- ✅ **Drizzle ORM v2** (`drizzle-orm/neon-http`) — no raw SQL strings
+- ✅ **Server Actions** with `"use server"` — no `fetch()` POST from Client Components
+- ✅ **Zod `safeParse()`** in every Server Action
+- ✅ **`revalidatePath()`** called after every mutation
+- ✅ **`useActionState()`** for all forms — no `useState(loading)`
+- ✅ **`DATABASE_URL` in `.env.local`** — never committed
+- ✅ **SQL migration files in `drizzle/`** — `drizzle-kit generate` + manual apply
+
+## Quality Checks
+
+```bash
+pnpm biome check .    # zero errors
+pnpm tsc --noEmit     # zero type errors
+pnpm build            # successful production build
+```
