@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import FloatingElement from "@/components/FloatingElement";
 
 export default function DecorativeClouds({
 	animated = true,
@@ -19,14 +20,16 @@ export default function DecorativeClouds({
 	return (
 		<div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
 			{/* Cloud A — top-right: larger and positioned mid-right, not pinned to very top */}
-			<div
-				aria-hidden="true"
-				className={`cloud-tr absolute right-[-5%] top-[12%]
+			<FloatingElement
+				duration={25}
+				delay={0}
+				yOffset={animated ? 15 : 0}
+				xOffset={animated ? -80 : 0}
+				className="cloud-tr absolute right-[-5%] top-[12%]
 					w-44 opacity-75
 					sm:right-0 sm:top-[8%] sm:w-52 sm:opacity-80
 					md:w-64
-					lg:top-0 lg:right-0 lg:w-140 lg:opacity-90
-					${animated ? "animate-float-cloud-1" : ""}`}
+					lg:top-0 lg:right-0 lg:w-140 lg:opacity-90"
 			>
 				<Image
 					loading="eager"
@@ -36,17 +39,19 @@ export default function DecorativeClouds({
 					height={210}
 					className="h-auto w-full opacity-60"
 				/>
-			</div>
+			</FloatingElement>
 
 			{/* Cloud B — mid-left on mobile (not bottom), bottom-left on desktop */}
-			<div
-				aria-hidden="true"
-				className={`absolute
+			<FloatingElement
+				duration={30}
+				delay={2}
+				yOffset={animated ? 20 : 0}
+				xOffset={animated ? 120 : 0}
+				className="absolute
 					top-[48%] left-[-18%] w-52 opacity-55
 					sm:top-[45%] sm:left-[-16%] sm:w-64 sm:opacity-55
 					md:w-80 md:opacity-55
-					lg:top-auto lg:bottom-[-10%] lg:left-[-10%] lg:w-180 lg:opacity-60
-					${animated ? "animate-float-cloud-2" : ""}`}
+					lg:top-auto lg:bottom-[-10%] lg:left-[-10%] lg:w-180 lg:opacity-60"
 			>
 				<Image
 					loading="eager"
@@ -56,17 +61,19 @@ export default function DecorativeClouds({
 					height={260}
 					className="h-auto w-full"
 				/>
-			</div>
+			</FloatingElement>
 
 			{/* Cloud C — bottom-right, kept above the footer */}
-			<div
-				aria-hidden="true"
-				className={`absolute
+			<FloatingElement
+				duration={20}
+				delay={1}
+				yOffset={animated ? 12 : 0}
+				xOffset={animated ? -60 : 0}
+				className="absolute
 					bottom-[14%] right-[-8%] w-44 opacity-70
 					sm:bottom-[10%] sm:right-[-6%] sm:w-56 sm:opacity-75
 					md:w-72
-					lg:bottom-[-10%] lg:right-[-10%] lg:w-140 lg:opacity-90
-					${animated ? "animate-float-cloud-1" : ""}`}
+					lg:bottom-[-10%] lg:right-[-10%] lg:w-140 lg:opacity-90"
 			>
 				<Image
 					src="/Cloud.svg"
@@ -75,7 +82,7 @@ export default function DecorativeClouds({
 					height={135}
 					className="h-auto w-full opacity-60"
 				/>
-			</div>
+			</FloatingElement>
 		</div>
 	);
 }

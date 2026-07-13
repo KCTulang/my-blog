@@ -10,7 +10,7 @@ async function main() {
 	}
 	const sql = neon(databaseUrl);
 
-	// console.log("Applying migration: adding tags and approved columns...");
+	console.log("Applying migration: adding tags and approved columns...");
 	await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS tags text[] NOT NULL DEFAULT '{}'`;
 	await sql`ALTER TABLE comments ADD COLUMN IF NOT EXISTS approved boolean NOT NULL DEFAULT false`;
 
@@ -25,9 +25,9 @@ async function main() {
 		// table may already exist
 	}
 
-	// console.log(
-	// 	"✓ Migration applied: posts.tags (text[]) + comments.approved (boolean)",
-	// );
+	console.log(
+		"✓ Migration applied: posts.tags (text[]) + comments.approved (boolean)",
+	);
 	process.exit(0);
 }
 

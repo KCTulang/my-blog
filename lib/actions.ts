@@ -177,7 +177,7 @@ export async function logoutAction() {
 // ─── Post Management ─────────────────────────────────────────────────────────
 
 const CreatePostSchema = z.object({
-	id: z.string().optional(), // For edits
+	id: z.string().nullable().optional(), // For edits
 	title: z
 		.string()
 		.min(1, "Title is required")
@@ -256,7 +256,7 @@ export async function savePost(
 				published: isPublished,
 			});
 		}
-	} catch {
+	} catch (_error) {
 		return {
 			success: false,
 			errors: {

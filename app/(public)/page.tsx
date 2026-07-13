@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PlaceholderCarousel } from "@/components/FeaturedBlogCarousel";
+import FloatingElement from "@/components/FloatingElement";
 import HiddenAdminLink from "@/components/HiddenAdminLink";
+import PeekabooEntrance from "@/components/PeekabooEntrance";
 import PostsCarouselSection from "@/components/PostsCarouselSection";
 
 export default function Home() {
@@ -31,13 +33,16 @@ export default function Home() {
 						lg:flex-none lg:w-[48%] lg:py-0"
 				>
 					{/* Stars — positioned to overlap the moon's visible sphere (accounting for SVG halo) */}
-					<div
+					<FloatingElement
+						duration={4}
+						delay={1}
+						yOffset={15}
+						xOffset={5}
 						className="pointer-events-none absolute z-20 w-16 opacity-90
 							left-[18%] top-[18%]
 							sm:left-[20%] sm:top-[20%] sm:w-20
 							md:w-24
-							lg:left-[10%] lg:top-[18%] lg:w-36 lg:opacity-100
-							animate-float-3"
+							lg:left-[10%] lg:top-[18%] lg:w-36 lg:opacity-100"
 					>
 						<Image
 							src="/Stars.svg"
@@ -46,16 +51,18 @@ export default function Home() {
 							height={163}
 							className="h-auto w-full"
 						/>
-					</div>
+					</FloatingElement>
 
-					<Image
-						src="/Moon.svg"
-						alt="Moon"
-						width={864}
-						height={832}
-						priority
-						className="h-120 w-auto sm:h-136 md:h-152 lg:h-[90vh] animate-float-2 pointer-events-none"
-					/>
+					<FloatingElement duration={4} delay={0.5} yOffset={25}>
+						<Image
+							src="/Moon.svg"
+							alt="Moon"
+							width={864}
+							height={832}
+							priority
+							className="h-120 w-auto sm:h-136 md:h-152 lg:h-[90vh] pointer-events-none"
+						/>
+					</FloatingElement>
 				</section>
 
 				{/* Logo + Subtitle + Carousel + Dog */}
@@ -109,36 +116,37 @@ export default function Home() {
 						</Suspense>
 
 						{/* Loona mascot — click to visit About page */}
-						<Link
-							href="/about"
-							aria-label="Meet Loona — visit the About page"
-							className="group absolute z-20
-								-right-20 bottom-0 h-36 w-28
-								sm:-right-22 sm:-bottom-2 sm:h-44 sm:w-36
-								lg:-right-36 lg:-bottom-5 lg:h-64 lg:w-52
-								cursor-pointer transition-transform duration-300 ease-out
-								hover:scale-105 hover:-translate-y-1"
-						>
-							{/* Tooltip */}
-							<span
-								aria-hidden="true"
-								className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2
-									whitespace-nowrap rounded-full border border-white/15
-									bg-[#0d1526]/80 px-3 py-1 text-xs font-semibold text-white/80
-									opacity-0 backdrop-blur-sm transition-opacity duration-200
-									group-hover:opacity-100"
+						<PeekabooEntrance delay={0.6} className="absolute z-20 -right-20 bottom-0 sm:-right-22 sm:-bottom-2 lg:-right-36 lg:-bottom-5">
+							<Link
+								href="/about"
+								aria-label="Meet Loona — visit the About page"
+								className="group block h-36 w-28
+									sm:h-44 sm:w-36
+									lg:h-64 lg:w-52
+									cursor-pointer transition-transform duration-300 ease-out
+									hover:scale-105 hover:-translate-y-1"
 							>
-								About Loonary ✦
-							</span>
+								{/* Tooltip */}
+								<span
+									aria-hidden="true"
+									className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2
+										whitespace-nowrap rounded-full border border-white/15
+										bg-[#0d1526]/80 px-3 py-1 text-xs font-semibold text-white/80
+										opacity-0 backdrop-blur-sm transition-opacity duration-200
+										group-hover:opacity-100"
+								>
+									About Loonary ✦
+								</span>
 
-							<Image
-								src="/Loona-hero-v2.png"
-								alt="Loona the dachshund — click to learn more"
-								fill
-								sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 208px"
-								className="object-contain object-bottom"
-							/>
-						</Link>
+								<Image
+									src="/Loona-hero-v2.png"
+									alt="Loona the dachshund — click to learn more"
+									fill
+									sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 208px"
+									className="object-contain object-bottom"
+								/>
+							</Link>
+						</PeekabooEntrance>
 					</div>
 				</section>
 			</main>
