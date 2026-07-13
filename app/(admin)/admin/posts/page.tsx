@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import AdminPostList from "@/components/AdminPostList";
+import { AdminPostListSkeleton } from "@/components/skeletons/AdminPostListSkeleton";
 import { db } from "@/lib/db";
 import { verifySession } from "@/lib/session";
 
@@ -9,24 +10,6 @@ export const metadata: Metadata = {
 	title: "Posts · Loonary Admin",
 	robots: { index: false, follow: false },
 };
-
-// ── Skeleton fallback ─────────────────────────────────────────────────────────
-
-function PostListSkeleton() {
-	return (
-		<div className="flex flex-col gap-4">
-			{["s1", "s2", "s3"].map((id) => (
-				<div
-					key={id}
-					className="card-glass-dim flex flex-col gap-3 rounded-2xl border border-white/10 px-5 py-4"
-				>
-					<div className="h-5 w-48 animate-pulse rounded bg-white/10" />
-					<div className="h-3 w-32 animate-pulse rounded bg-white/5" />
-				</div>
-			))}
-		</div>
-	);
-}
 
 // ── Dynamic island ────────────────────────────────────────────────────────────
 
@@ -58,7 +41,7 @@ export default function AdminPostsPage() {
 					Manage your published posts and drafts.
 				</p>
 
-				<Suspense fallback={<PostListSkeleton />}>
+				<Suspense fallback={<AdminPostListSkeleton />}>
 					<PostListIsland />
 				</Suspense>
 			</main>

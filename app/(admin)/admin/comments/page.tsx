@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import AdminCommentList from "@/components/AdminCommentList";
+import { AdminCommentListSkeleton } from "@/components/skeletons/AdminCommentListSkeleton";
 import { db } from "@/lib/db";
 import { verifySession } from "@/lib/session";
 
@@ -17,28 +18,6 @@ async function fetchAllComments() {
 		with: { post: true },
 		orderBy: (c, { desc }) => [desc(c.createdAt)],
 	});
-}
-
-// ── Skeleton fallback ─────────────────────────────────────────────────────────
-
-function CommentListSkeleton() {
-	return (
-		<div className="flex flex-col gap-4">
-			{["sk-1", "sk-2", "sk-3"].map((id) => (
-				<div
-					key={id}
-					className="card-glass-dim rounded-2xl border border-white/10 px-6 py-5"
-				>
-					<div className="mb-3 flex gap-3">
-						<div className="h-4 w-24 animate-pulse rounded bg-white/10" />
-						<div className="h-4 w-14 animate-pulse rounded bg-amber-500/10" />
-					</div>
-					<div className="mb-2 h-3 w-full animate-pulse rounded bg-white/5" />
-					<div className="h-3 w-3/4 animate-pulse rounded bg-white/5" />
-				</div>
-			))}
-		</div>
-	);
 }
 
 // ── Dynamic island ────────────────────────────────────────────────────────────
@@ -69,7 +48,7 @@ export default function AdminCommentsPage() {
 					Approve, delete, filter, and reply to reader comments.
 				</p>
 
-				<Suspense fallback={<CommentListSkeleton />}>
+				<Suspense fallback={<AdminCommentListSkeleton />}>
 					<CommentListIsland />
 				</Suspense>
 			</main>
