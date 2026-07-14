@@ -16,6 +16,7 @@ export const posts = pgTable("posts", {
 	tags: text("tags").array().notNull().default([]),
 	published: boolean("published").notNull().default(true),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
+	deletedAt: timestamp("deleted_at"),
 });
 
 export const authAttempts = pgTable("auth_attempts", {
@@ -34,6 +35,7 @@ export const comments = pgTable("comments", {
 	body: text("body").notNull(),
 	approved: boolean("approved").notNull().default(false),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
+	deletedAt: timestamp("deleted_at"),
 });
 
 export const postsRelations = relations(posts, ({ many }) => ({
