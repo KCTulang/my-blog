@@ -23,109 +23,136 @@ export default function AboutPage() {
 				}}
 			/>
 
-			<main className="relative z-10 mx-auto w-full max-w-2xl flex-1 px-6 pb-20 pt-28">
-				{/* ── DRAFT BANNER ── */}
-				<div className="mb-10 rounded-xl border border-amber-400/20 bg-amber-400/5 px-4 py-2.5 text-center text-xs text-amber-400/80">
-					✏️ Draft page — content coming soon
-				</div>
-
-				{/* ── HERO ── */}
-				<div className="mb-14 flex flex-col items-center text-center">
-					{/* Loona portrait */}
-					<FloatingElement
-						yOffset={12}
-						duration={4}
-						className="relative mb-6 h-44 w-44 overflow-hidden rounded-full border-2 border-white/10 shadow-[0_0_40px_rgba(176,189,214,0.15)]"
-					>
-						<Image
-							src="/Loona-hero-v2.png"
-							alt="Loona the dachshund"
-							fill
-							sizes="176px"
-							className="object-cover object-top scale-125"
-							priority
-						/>
-					</FloatingElement>
-
+			<main className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-6 pb-20 pt-28">
+				<div className="mb-12 text-center lg:text-left">
 					<h1 className="mb-2 font-serif text-4xl font-semibold text-white">
 						About Loonary
 					</h1>
 					<p className="font-serif text-light-blue">a moonlit digital diary</p>
 				</div>
 
-				{/* ── ABOUT THE BLOG ── */}
-				<section className="mb-10">
-					<FadeInUp delay={0.1}>
-						<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
-							<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
-								The Blog
-							</h2>
-							<p className="mb-4 text-sm font-light leading-relaxed text-zinc-400">
-								{/* TODO: replace with real copy */}
-								Loonary is a personal space for thoughts, stories, and
-								reflections — written under the quiet glow of the moon. Inspired
-								by a dachshund named Loona, it's equal parts diary, tech notes,
-								and life musings.
-							</p>
-							<p className="text-sm font-light leading-relaxed text-zinc-400">
-								{/* TODO: expand */}
-								Built with Next.js, Neon Postgres, and Drizzle ORM as part of a
-								full-stack capstone project — and designed to feel warm, calm,
-								and a little bit magical.
-							</p>
-						</div>
-					</FadeInUp>
-				</section>
+				<div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-stretch">
+					
+					{/* ── LEFT COLUMN: CONTENT ── */}
+					<div className="flex flex-1 flex-col w-full lg:max-w-2xl">
 
-				{/* ── ABOUT THE AUTHOR ── */}
-				<section className="mb-10">
-					<FadeInUp delay={0.2}>
-						<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
-							<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
-								The Writer
-							</h2>
-							<p className="mb-4 text-sm font-light leading-relaxed text-zinc-400">
-								{/* TODO: replace with real bio */}
-								Hi, I'm Kenneth Claire — a developer who writes code by day and
-								stories by night. I built this blog to practice shipping real
-								full-stack projects and to have a cozy corner of the internet to
-								call my own.
-							</p>
-							<p className="text-sm font-light leading-relaxed text-zinc-400">
-								{/* TODO: add links */}
-								When I'm not coding, I'm probably spending time with Loona,
-								watching the moon, or overthinking a new side project.
-							</p>
-						</div>
-					</FadeInUp>
-				</section>
 
-				{/* ── ABOUT LOONA ── */}
-				<section className="mb-12">
-					<FadeInUp delay={0.3}>
-						<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
-							<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
-								The Dog 🐾
-							</h2>
-							<p className="text-sm font-light leading-relaxed text-zinc-400">
-								{/* TODO: add Loona's story */}
-								Loona is a miniature dachshund and the true mascot of this blog.
-								She doesn't write posts (yet), but she provides moral support,
-								warmth, and the occasional dramatic sigh. The blog is named
-								after her.
-							</p>
+						<div className="flex flex-col gap-6">
+							{/* ── ABOUT THE BLOG ── */}
+							<FadeInUp delay={0.1}>
+								<div className="card-glass-dim rounded-3xl border border-white/10 p-8 sm:p-10 transition-all duration-300 hover:border-white/20 hover:shadow-xl">
+									<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
+										The Blog
+									</h2>
+									<p className="mb-4 text-sm font-light leading-relaxed text-zinc-400 sm:text-base">
+										Loonary is a personal space for thoughts, stories, and
+										reflections — written under the quiet glow of the moon. Inspired
+										by a dachshund named Loona, it's equal parts diary, tech notes,
+										and life musings.
+									</p>
+									<p className="text-sm font-light leading-relaxed text-zinc-400 sm:text-base">
+										Built with Next.js, Neon Postgres, and Drizzle ORM as part of a
+										full-stack capstone project — and designed to feel warm, calm,
+										and a little bit magical.
+									</p>
+								</div>
+							</FadeInUp>
+
+							{/* ── ABOUT THE AUTHOR ── */}
+							<FadeInUp delay={0.2} className="h-full">
+								<div className="card-glass-dim h-full flex flex-col rounded-3xl border border-white/10 p-8 sm:p-10 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl">
+									<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
+										The Writer
+									</h2>
+									<p className="text-sm font-light leading-relaxed text-zinc-400">
+										Hi, I'm Kenneth Claire — a developer who writes code by day and
+										stories by night. I built this blog to practice shipping real
+										full-stack projects and to have a cozy corner of the internet to
+										call my own.
+									</p>
+								</div>
+							</FadeInUp>
+
+							{/* ── ABOUT LOONA ── */}
+							<FadeInUp delay={0.3} className="h-full">
+								<div className="card-glass-dim h-full flex flex-col rounded-3xl border border-white/10 p-8 sm:p-10 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl">
+									<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
+										The Dog
+									</h2>
+									<p className="text-sm font-light leading-relaxed text-zinc-400">
+										Loona is a miniature dachshund and the true mascot of this blog.
+										She doesn't write posts (yet), but she provides moral support,
+										warmth, and the occasional dramatic sigh. The blog is named
+										after her.
+									</p>
+								</div>
+							</FadeInUp>
 						</div>
-					</FadeInUp>
-				</section>
+
+					</div>
+
+					{/* ── RIGHT COLUMN: LOONA IMAGE & EXTRAS ── */}
+					<div className="flex w-full lg:w-1/2 flex-col gap-6 lg:justify-between">
+						{/* Loona Image */}
+						<div className="flex w-full justify-center">
+							<FadeInUp className="w-full max-w-sm lg:max-w-md">
+								<FloatingElement
+									yOffset={15}
+									duration={5}
+									className="relative h-[300px] sm:h-[400px] lg:h-[450px] w-full"
+								>
+									<Image
+										src="/Loona-hero-v2.png"
+										alt="Loona the dachshund in all her glory"
+										fill
+										sizes="(max-width: 1024px) 100vw, 50vw"
+										className="object-contain object-top"
+										priority
+									/>
+								</FloatingElement>
+							</FadeInUp>
+						</div>
+
+						{/* Tech Stack Card */}
+						<FadeInUp delay={0.4}>
+							<div className="card-glass-dim rounded-3xl border border-white/10 p-8 sm:p-10 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl">
+								<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
+									The Tech Stack
+								</h2>
+								<div className="mb-6 flex flex-wrap gap-2">
+									{[
+										"Next.js",
+										"React",
+										"TypeScript",
+										"Tailwind CSS",
+										"Framer Motion",
+										"Drizzle ORM",
+										"Neon",
+									].map((tech) => (
+										<span
+											key={tech}
+											className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-zinc-300 shadow-sm"
+										>
+											{tech}
+										</span>
+									))}
+								</div>
+								<p className="text-sm font-light leading-relaxed text-zinc-400">
+									Loonary is built to be fast, smooth, and beautiful. It leverages modern web technologies to deliver a rich, app-like experience while remaining statically optimized and completely open for the world to read.
+								</p>
+							</div>
+						</FadeInUp>
+					</div>
+				</div>
 
 				{/* ── CTA ── */}
-				<div className="text-center">
+				<div className="mt-16 text-center">
 					<FadeInUp delay={0.4}>
 						<Link
 							href="/blog"
-							className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/8 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/15"
+							className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-4 text-sm font-semibold tracking-wide text-white backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
 						>
-							Read the stories →
+							Read the stories ✦
 						</Link>
 					</FadeInUp>
 				</div>
