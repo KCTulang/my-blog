@@ -1,9 +1,9 @@
 import { and, arrayContains, desc, eq, isNull } from "drizzle-orm";
 import Link from "next/link";
 import { Suspense } from "react";
+import BlogPostCard from "@/components/BlogPostCard";
 import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
-import BlogPostCard from "@/components/BlogPostCard";
 
 // Dynamic comment count
 async function CommentCount({ postId }: { postId: string }) {
