@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
 import "./globals.css";
+import CustomCursor from "@/components/CustomCursor";
 
 const lora = Lora({
 	subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
 			<body
 				className={`${inter.variable} ${lora.variable} antialiased flex min-h-screen flex-col`}
 			>
+				<CustomCursor />
 				{children}
 			</body>
 		</html>

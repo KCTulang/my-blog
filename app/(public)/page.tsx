@@ -6,6 +6,7 @@ import FloatingElement from "@/components/FloatingElement";
 import HiddenAdminLink from "@/components/HiddenAdminLink";
 import PeekabooEntrance from "@/components/PeekabooEntrance";
 import PostsCarouselSection from "@/components/PostsCarouselSection";
+import FadeInUp from "@/components/FadeInUp";
 
 export default function Home() {
 	return (
@@ -153,6 +154,56 @@ export default function Home() {
 					</div>
 				</section>
 			</main>
+
+			{/* About Section */}
+			<section className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 py-32 sm:px-6 lg:py-48 text-center">
+				<FadeInUp>
+					<h2 className="mb-12 font-serif text-3xl font-semibold text-white sm:text-4xl">Behind the Diary</h2>
+				</FadeInUp>
+				
+				<div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					{[
+						{
+							title: "The Author",
+							desc: "A developer and dreamer sharing late-night thoughts, code adventures, and reflections under the moonlight.",
+						},
+						{
+							title: "The Concept",
+							desc: "Why call a public blog a diary? Because it's written with the vulnerability and raw honesty of a private journal, just left open under the moonlight for fellow wanderers to find.",
+						},
+						{
+							title: "The Companion",
+							desc: "Meet Loona, the ever-curious dachshund mascot who occasionally wanders through the pages of this journal.",
+						},
+					].map((item, i) => (
+						<FadeInUp key={item.title} delay={0.15 + i * 0.1} className="flex h-full w-full">
+							<div className="card-glass-dim flex flex-1 flex-col items-center text-center rounded-3xl border border-white/10 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl">
+								<h3 className="mb-3 font-serif text-xl font-semibold text-white">{item.title}</h3>
+								<p className="text-sm font-light leading-relaxed text-zinc-400 mb-6 flex-1">{item.desc}</p>
+								<Link
+									href="/about"
+									className="mt-auto inline-flex items-center text-xs font-semibold text-white/50 transition-colors duration-200 hover:text-white"
+								>
+									Learn more <span className="ml-1">→</span>
+								</Link>
+							</div>
+						</FadeInUp>
+					))}
+				</div>
+			</section>
+
+			{/* Explore Section */}
+			<section className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center px-4 pb-32 pt-16 sm:px-6 lg:pb-48 text-center">
+				<FadeInUp delay={0.2}>
+					<h2 className="mb-8 font-serif text-2xl font-semibold text-white sm:text-3xl">Ready to Explore?</h2>
+					<Link
+						href="/blog"
+						className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-4 text-sm font-semibold tracking-wide text-white backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+					>
+						Read the Stories ✦
+					</Link>
+				</FadeInUp>
+			</section>
 		</div>
 	);
 }
