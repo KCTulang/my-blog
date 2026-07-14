@@ -1,4 +1,4 @@
-import { and, arrayContains, desc, eq } from "drizzle-orm";
+import { and, arrayContains, desc, eq, isNull } from "drizzle-orm";
 import Link from "next/link";
 import { Suspense } from "react";
 import { db } from "@/lib/db";
@@ -62,20 +62,29 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 	const { tag } = await searchParams;
 
 	// Collect all unique tags across all posts for the filter bar
-	const tagRows = await db.select({ tags: posts.tags }).from(posts);
+	const tagRows = await db
+		.select({ tags: posts.tags })
+		.from(posts)
+		.where(isNull(posts.deletedAt));
 	const allTags = [...new Set(tagRows.flatMap((r) => r.tags))].sort();
 
 	// Fetch published posts
 	const baseQuery = db
 		.select()
 		.from(posts)
-		.where(eq(posts.published, true))
+		.where(and(eq(posts.published, true), isNull(posts.deletedAt)))
 		.orderBy(desc(posts.createdAt));
 	const postList = tag
 		? await db
 				.select()
 				.from(posts)
-				.where(and(eq(posts.published, true), arrayContains(posts.tags, [tag])))
+				.where(
+					and(
+						eq(posts.published, true),
+						isNull(posts.deletedAt),
+						arrayContains(posts.tags, [tag]),
+					),
+				)
 				.orderBy(desc(posts.createdAt))
 		: await baseQuery;
 

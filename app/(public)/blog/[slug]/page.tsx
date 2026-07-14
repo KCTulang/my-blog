@@ -12,7 +12,8 @@ async function CommentList({ postId }: { postId: string }) {
 		where: (p, { eq }) => eq(p.id, postId),
 		with: {
 			comments: {
-				where: (c, { eq }) => eq(c.approved, true),
+				where: (c, { and, eq, isNull }) =>
+					and(eq(c.approved, true), isNull(c.deletedAt)),
 				orderBy: (c, { asc }) => [asc(c.createdAt)],
 			},
 		},
@@ -69,7 +70,8 @@ export default async function PostPage({ params }: PostPageProps) {
 	const { slug } = await params;
 
 	const post = await db.query.posts.findFirst({
-		where: (p, { eq }) => eq(p.slug, slug),
+		where: (p, { and, eq, isNull }) =>
+			and(eq(p.slug, slug), isNull(p.deletedAt)),
 	});
 
 	// Calls Next.js notFound() if slug doesn't match any post

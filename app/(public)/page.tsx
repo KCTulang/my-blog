@@ -32,7 +32,7 @@ export default function Home() {
 						sm:py-4
 						lg:flex-none lg:w-[48%] lg:py-0"
 				>
-					{/* Stars — positioned to overlap the moon's visible sphere (accounting for SVG halo) */}
+					{/* Stars  */}
 					<FloatingElement
 						duration={4}
 						delay={1}
@@ -116,7 +116,10 @@ export default function Home() {
 						</Suspense>
 
 						{/* Loona mascot — click to visit About page */}
-						<PeekabooEntrance delay={0.6} className="absolute z-20 -right-20 bottom-0 sm:-right-22 sm:-bottom-2 lg:-right-36 lg:-bottom-5">
+						<PeekabooEntrance
+							delay={0.6}
+							className="absolute z-20 -right-20 bottom-0 sm:-right-22 sm:-bottom-2 lg:-right-36 lg:-bottom-5"
+						>
 							<Link
 								href="/about"
 								aria-label="Meet Loona — visit the About page"
