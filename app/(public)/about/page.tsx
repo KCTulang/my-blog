@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import FadeInUp from "@/components/FadeInUp";
+import FloatingElement from "@/components/FloatingElement";
 
 export const metadata: Metadata = {
 	title: "About — Loonary",
@@ -30,7 +32,11 @@ export default function AboutPage() {
 				{/* ── HERO ── */}
 				<div className="mb-14 flex flex-col items-center text-center">
 					{/* Loona portrait */}
-					<div className="relative mb-6 h-44 w-44 overflow-hidden rounded-full border-2 border-white/10 shadow-[0_0_40px_rgba(176,189,214,0.15)]">
+					<FloatingElement
+						yOffset={12}
+						duration={4}
+						className="relative mb-6 h-44 w-44 overflow-hidden rounded-full border-2 border-white/10 shadow-[0_0_40px_rgba(176,189,214,0.15)]"
+					>
 						<Image
 							src="/Loona-hero-v2.png"
 							alt="Loona the dachshund"
@@ -39,7 +45,7 @@ export default function AboutPage() {
 							className="object-cover object-top scale-125"
 							priority
 						/>
-					</div>
+					</FloatingElement>
 
 					<h1 className="mb-2 font-serif text-4xl font-semibold text-white">
 						About Loonary
@@ -49,71 +55,79 @@ export default function AboutPage() {
 
 				{/* ── ABOUT THE BLOG ── */}
 				<section className="mb-10">
-					<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
-						<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
-							The Blog
-						</h2>
-						<p className="mb-4 text-sm font-light leading-relaxed text-zinc-400">
-							{/* TODO: replace with real copy */}
-							Loonary is a personal space for thoughts, stories, and reflections
-							— written under the quiet glow of the moon. Inspired by a
-							dachshund named Loona, it's equal parts diary, tech notes, and
-							life musings.
-						</p>
-						<p className="text-sm font-light leading-relaxed text-zinc-400">
-							{/* TODO: expand */}
-							Built with Next.js, Neon Postgres, and Drizzle ORM as part of a
-							full-stack capstone project — and designed to feel warm, calm, and
-							a little bit magical.
-						</p>
-					</div>
+					<FadeInUp delay={0.1}>
+						<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
+							<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
+								The Blog
+							</h2>
+							<p className="mb-4 text-sm font-light leading-relaxed text-zinc-400">
+								{/* TODO: replace with real copy */}
+								Loonary is a personal space for thoughts, stories, and
+								reflections — written under the quiet glow of the moon. Inspired
+								by a dachshund named Loona, it's equal parts diary, tech notes,
+								and life musings.
+							</p>
+							<p className="text-sm font-light leading-relaxed text-zinc-400">
+								{/* TODO: expand */}
+								Built with Next.js, Neon Postgres, and Drizzle ORM as part of a
+								full-stack capstone project — and designed to feel warm, calm,
+								and a little bit magical.
+							</p>
+						</div>
+					</FadeInUp>
 				</section>
 
 				{/* ── ABOUT THE AUTHOR ── */}
 				<section className="mb-10">
-					<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
-						<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
-							The Writer
-						</h2>
-						<p className="mb-4 text-sm font-light leading-relaxed text-zinc-400">
-							{/* TODO: replace with real bio */}
-							Hi, I'm Kenneth Claire — a developer who writes code by day and
-							stories by night. I built this blog to practice shipping real
-							full-stack projects and to have a cozy corner of the internet to
-							call my own.
-						</p>
-						<p className="text-sm font-light leading-relaxed text-zinc-400">
-							{/* TODO: add links */}
-							When I'm not coding, I'm probably spending time with Loona,
-							watching the moon, or overthinking a new side project.
-						</p>
-					</div>
+					<FadeInUp delay={0.2}>
+						<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
+							<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
+								The Writer
+							</h2>
+							<p className="mb-4 text-sm font-light leading-relaxed text-zinc-400">
+								{/* TODO: replace with real bio */}
+								Hi, I'm Kenneth Claire — a developer who writes code by day and
+								stories by night. I built this blog to practice shipping real
+								full-stack projects and to have a cozy corner of the internet to
+								call my own.
+							</p>
+							<p className="text-sm font-light leading-relaxed text-zinc-400">
+								{/* TODO: add links */}
+								When I'm not coding, I'm probably spending time with Loona,
+								watching the moon, or overthinking a new side project.
+							</p>
+						</div>
+					</FadeInUp>
 				</section>
 
 				{/* ── ABOUT LOONA ── */}
 				<section className="mb-12">
-					<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
-						<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
-							The Dog 🐾
-						</h2>
-						<p className="text-sm font-light leading-relaxed text-zinc-400">
-							{/* TODO: add Loona's story */}
-							Loona is a miniature dachshund and the true mascot of this blog.
-							She doesn't write posts (yet), but she provides moral support,
-							warmth, and the occasional dramatic sigh. The blog is named after
-							her.
-						</p>
-					</div>
+					<FadeInUp delay={0.3}>
+						<div className="card-glass-dim rounded-2xl border border-white/10 px-7 py-8">
+							<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
+								The Dog 🐾
+							</h2>
+							<p className="text-sm font-light leading-relaxed text-zinc-400">
+								{/* TODO: add Loona's story */}
+								Loona is a miniature dachshund and the true mascot of this blog.
+								She doesn't write posts (yet), but she provides moral support,
+								warmth, and the occasional dramatic sigh. The blog is named
+								after her.
+							</p>
+						</div>
+					</FadeInUp>
 				</section>
 
 				{/* ── CTA ── */}
 				<div className="text-center">
-					<Link
-						href="/blog"
-						className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/8 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/15"
-					>
-						Read the stories →
-					</Link>
+					<FadeInUp delay={0.4}>
+						<Link
+							href="/blog"
+							className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/8 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/15"
+						>
+							Read the stories →
+						</Link>
+					</FadeInUp>
 				</div>
 			</main>
 		</div>

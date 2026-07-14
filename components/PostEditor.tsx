@@ -1,8 +1,23 @@
 "use client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
-import { type CreatePostState, savePost } from "@/lib/actions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { autoSavePost, savePost } from "@/lib/actions";
+import { CreatePostSchema } from "@/lib/validations/post";
 
 type Post = {
 	id: string;
@@ -13,186 +28,309 @@ type Post = {
 	published: boolean;
 };
 
-// Submit button uses useFormStatus so it disables during the server round-trip
-function SubmitButton() {
-	const { pending } = useFormStatus();
-	return (
-		<button
-			type="submit"
-			disabled={pending}
-			className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-		>
-			{pending ? "Saving…" : "Save post"}
-		</button>
-	);
-}
+type PostFormValues = z.infer<typeof CreatePostSchema>;
 
-function FieldError({ messages }: { messages?: string[] }) {
-	if (!messages?.length) return null;
+function FieldError({ message }: { message?: string }) {
+	if (!message) return null;
 	return (
 		<p className="mt-1 text-xs text-red-400" role="alert">
-			{messages[0]}
+			{message}
 		</p>
 	);
 }
 
-const initialState: CreatePostState = { success: false };
+function buildFormData(values: PostFormValues): FormData {
+	const formData = new FormData();
+	if (values.id) formData.append("id", values.id);
+	formData.append("title", values.title);
+	formData.append("slug", values.slug);
+	formData.append("body", values.body);
+	if (values.tags) formData.append("tags", values.tags);
+	return formData;
+}
 
 export default function PostEditor({ post }: { post?: Post }) {
-	const [state, formAction] = useActionState(savePost, initialState);
+	const [isAutoSaving, setIsAutoSaving] = useState(false);
+	const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
-	// Auto-generate a URL-safe slug from the title
-	function toSlug(value: string): string {
-		return value
-			.toLowerCase()
-			.trim()
-			.replace(/[^a-z0-9\s-]/g, "")
-			.replace(/\s+/g, "-")
-			.replace(/-+/g, "-");
-	}
+	const [submitAction, setSubmitAction] = useState<"publish" | "draft">(
+		"draft",
+	);
+	const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+	const [pendingValues, setPendingValues] = useState<PostFormValues | null>(
+		null,
+	);
 
-	function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
-		const slugInput = document.getElementById(
-			"admin-slug",
-		) as HTMLInputElement | null;
-		if (slugInput && !slugInput.dataset.edited) {
-			slugInput.value = toSlug(e.target.value);
+	const form = useForm<PostFormValues>({
+		// biome-ignore lint/suspicious/noExplicitAny: Zod 4 type compatibility with hookform resolvers
+		resolver: zodResolver(CreatePostSchema as any),
+		defaultValues: {
+			id: post?.id || "",
+			title: post?.title || "",
+			slug: post?.slug || "",
+			body: post?.body || "",
+			tags: post?.tags.join(", ") || "",
+			published: post ? (post.published ? "true" : "false") : "false",
+		},
+		mode: "onChange",
+	});
+
+	const {
+		register,
+		watch,
+		handleSubmit,
+		setValue,
+		formState: { errors, isSubmitting, isDirty },
+	} = form;
+
+	// Watch values for auto-save
+	const watchedValues = watch();
+
+	// Auto-generate slug from title
+	useEffect(() => {
+		const subscription = watch((value, { name }) => {
+			if (name === "title" && !form.formState.dirtyFields.slug) {
+				const title = value.title || "";
+				const slug = title
+					.toLowerCase()
+					.trim()
+					.replace(/[^a-z0-9\s-]/g, "")
+					.replace(/\s+/g, "-")
+					.replace(/-+/g, "-");
+				setValue("slug", slug, { shouldValidate: true });
+			}
+		});
+		return () => subscription.unsubscribe();
+	}, [watch, setValue, form.formState.dirtyFields.slug]);
+
+	// Auto-save logic
+	useEffect(() => {
+		if (!isDirty) return;
+
+		const doAutoSave = async () => {
+			// Validate first before auto-saving
+			const isValid = await form.trigger();
+			if (!isValid) return;
+
+			setIsAutoSaving(true);
+			const values = form.getValues();
+			const formData = buildFormData(values);
+
+			// Auto-save uses the current published state, never publishes a draft implicitly
+			if (values.published) formData.append("published", values.published);
+
+			// Call server action directly for auto-save
+			const result = await autoSavePost({ success: false }, formData);
+
+			setIsAutoSaving(false);
+
+			if (result.success && result.id) {
+				setLastSaved(new Date());
+
+				// If it's a new post, update the ID in the form and the URL without a hard refresh
+				if (!values.id) {
+					setValue("id", result.id);
+					window.history.replaceState({}, "", `/admin/posts/${result.id}/edit`);
+				}
+			}
+		};
+
+		const timer = setTimeout(doAutoSave, 2000); // 2 second debounce
+
+		return () => clearTimeout(timer);
+	}, [isDirty, form, setValue]);
+
+	const executeSave = async (values: PostFormValues, isPublishing: boolean) => {
+		const formData = buildFormData(values);
+
+		// Set published status explicitly based on action
+		const publishedStatus = isPublishing ? "true" : "false";
+		formData.append("published", publishedStatus);
+		setValue("published", publishedStatus);
+
+		const result = await savePost({ success: false }, formData);
+
+		if (!result.success) {
+			toast.error(result.errors?._form?.[0] || "Failed to save post");
+		} else {
+			toast.success(isPublishing ? "Post published!" : "Draft saved");
 		}
-	}
+	};
 
-	function handleSlugChange(e: React.ChangeEvent<HTMLInputElement>) {
-		e.currentTarget.dataset.edited = "true";
-	}
+	const onSubmit = async (values: PostFormValues) => {
+		if (submitAction === "publish") {
+			setPendingValues(values);
+			setIsPublishModalOpen(true);
+		} else {
+			await executeSave(values, false);
+		}
+	};
+
+	const confirmPublish = async () => {
+		if (pendingValues) {
+			await executeSave(pendingValues, true);
+		}
+		setIsPublishModalOpen(false);
+	};
 
 	return (
-		<form action={formAction} className="flex flex-col gap-5">
-			{post && <input type="hidden" name="id" value={post.id} />}
+		<>
+			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+				<input type="hidden" {...register("id")} />
+				<input type="hidden" {...register("published")} />
 
-			{/* Status */}
-			<div>
-				<label
-					htmlFor="status"
-					className="mb-1 block text-xs font-medium text-zinc-400"
+				{/* Title */}
+				<div>
+					<label
+						htmlFor="admin-title"
+						className="mb-1 block text-xs font-medium text-zinc-400"
+					>
+						Title
+					</label>
+					<input
+						id="admin-title"
+						type="text"
+						{...register("title")}
+						placeholder="My moonlit post"
+						className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
+					/>
+					<FieldError message={errors.title?.message} />
+				</div>
+
+				{/* Slug */}
+				<div>
+					<label
+						htmlFor="admin-slug"
+						className="mb-1 block text-xs font-medium text-zinc-400"
+					>
+						Slug{" "}
+						<span className="text-zinc-600">(auto-generated, editable)</span>
+					</label>
+					<input
+						id="admin-slug"
+						type="text"
+						{...register("slug")}
+						placeholder="my-moonlit-post"
+						className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-mono text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
+					/>
+					<FieldError message={errors.slug?.message} />
+				</div>
+
+				{/* Body */}
+				<div>
+					<label
+						htmlFor="admin-body"
+						className="mb-1 block text-xs font-medium text-zinc-400"
+					>
+						Body
+					</label>
+					<textarea
+						id="admin-body"
+						rows={10}
+						{...register("body")}
+						placeholder="Write your post here…"
+						className="min-h-50 w-full resize-y rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
+					/>
+					<FieldError message={errors.body?.message} />
+				</div>
+
+				{/* Tags */}
+				<div>
+					<label
+						htmlFor="admin-tags"
+						className="mb-1 block text-xs font-medium text-zinc-400"
+					>
+						Tags
+					</label>
+					<input
+						id="admin-tags"
+						type="text"
+						{...register("tags")}
+						placeholder="tech, personal, nextjs"
+						className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
+					/>
+					<p className="mt-1.5 text-xs text-zinc-500 sm:mt-1">
+						Comma-separated, e.g. tech, personal
+					</p>
+					<FieldError message={errors.tags?.message} />
+				</div>
+
+				{/* Two Actions Workflow */}
+				<div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+					<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+						<button
+							type="submit"
+							onClick={() => setSubmitAction("publish")}
+							disabled={isSubmitting}
+							className="min-h-11 rounded-xl bg-white px-6 text-sm font-semibold text-black transition-all duration-200 hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							Publish
+						</button>
+						<button
+							type="submit"
+							onClick={() => setSubmitAction("draft")}
+							disabled={isSubmitting}
+							className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							Save as Draft
+						</button>
+						{watchedValues.id && watchedValues.slug && (
+							<a
+								href={`/blog/${watchedValues.slug}`}
+								target="_blank"
+								rel="noreferrer"
+								className="min-h-11 inline-flex items-center justify-center rounded-xl border border-white/15 bg-transparent px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10"
+							>
+								Preview
+							</a>
+						)}
+					</div>
+					<Link
+						href="/admin/posts"
+						className="text-center text-sm text-zinc-500 hover:text-white sm:text-right"
+					>
+						Cancel
+					</Link>
+				</div>
+
+				{/* Autosave status */}
+				<div
+					className="h-4 text-center text-xs text-zinc-500"
+					aria-live="polite"
 				>
-					Status
-				</label>
-				<select
-					id="status"
-					name="published"
-					defaultValue={post ? (post.published ? "true" : "false") : "true"}
-					className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/20"
-				>
-					<option value="true" className="text-black">
-						Published
-					</option>
-					<option value="false" className="text-black">
-						Draft
-					</option>
-				</select>
-			</div>
+					{isAutoSaving
+						? "Saving draft..."
+						: lastSaved
+							? `Draft saved at ${lastSaved.toLocaleTimeString()}`
+							: null}
+				</div>
+			</form>
 
-			{/* Title */}
-			<div>
-				<label
-					htmlFor="admin-title"
-					className="mb-1 block text-xs font-medium text-zinc-400"
-				>
-					Title
-				</label>
-				<input
-					id="admin-title"
-					name="title"
-					type="text"
-					required
-					maxLength={200}
-					defaultValue={post?.title}
-					placeholder="My moonlit post"
-					onChange={handleTitleChange}
-					className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
-				/>
-				<FieldError messages={state.errors?.title} />
-			</div>
-
-			{/* Slug (auto-filled from title, editable) */}
-			<div>
-				<label
-					htmlFor="admin-slug"
-					className="mb-1 block text-xs font-medium text-zinc-400"
-				>
-					Slug <span className="text-zinc-600">(auto-generated, editable)</span>
-				</label>
-				<input
-					id="admin-slug"
-					name="slug"
-					type="text"
-					required
-					defaultValue={post?.slug}
-					data-edited={!!post}
-					placeholder="my-moonlit-post"
-					onChange={handleSlugChange}
-					className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-mono text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
-				/>
-				<FieldError messages={state.errors?.slug} />
-			</div>
-
-			{/* Body */}
-			<div>
-				<label
-					htmlFor="admin-body"
-					className="mb-1 block text-xs font-medium text-zinc-400"
-				>
-					Body
-				</label>
-				<textarea
-					id="admin-body"
-					name="body"
-					required
-					rows={10}
-					defaultValue={post?.body}
-					placeholder="Write your post here…"
-					className="min-h-50 w-full resize-y rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
-				/>
-				<FieldError messages={state.errors?.body} />
-			</div>
-
-			{/* Tags */}
-			<div>
-				<label
-					htmlFor="admin-tags"
-					className="mb-1 block text-xs font-medium text-zinc-400"
-				>
-					Tags
-				</label>
-				<input
-					id="admin-tags"
-					name="tags"
-					type="text"
-					defaultValue={post?.tags.join(", ")}
-					placeholder="tech, personal, nextjs"
-					className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
-				/>
-				<p className="mt-1.5 text-xs text-zinc-500 sm:mt-1">
-					Comma-separated, e.g. tech, personal
-				</p>
-				<FieldError messages={state.errors?.tags} />
-			</div>
-
-			{/* Form-level error */}
-			{state.errors?._form && (
-				<p
-					className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-xs text-red-400"
-					role="alert"
-				>
-					{state.errors._form[0]}
-				</p>
-			)}
-
-			<SubmitButton />
-
-			{/* Placeholder for future autosave status */}
-			<p className="text-center text-xs text-zinc-500" aria-live="polite">
-				Draft saved locally (placeholder)
-			</p>
-		</form>
+			<AlertDialog
+				open={isPublishModalOpen}
+				onOpenChange={setIsPublishModalOpen}
+			>
+				<AlertDialogContent className="border-white/10 bg-[#0d1526] text-white">
+					<AlertDialogHeader>
+						<AlertDialogTitle>Ready to publish?</AlertDialogTitle>
+						<AlertDialogDescription className="text-zinc-400">
+							You are about to publish "{pendingValues?.title || "this post"}".
+							Are you ready for this to go live?
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel className="border-white/10 bg-transparent text-white hover:bg-white/5">
+							Review again
+						</AlertDialogCancel>
+						<AlertDialogAction
+							onClick={confirmPublish}
+							className="bg-white text-black hover:bg-zinc-200"
+						>
+							Yes, publish it
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+		</>
 	);
 }
