@@ -22,9 +22,9 @@ export default function FloatingElement({
 	return (
 		<motion.div
 			className={className}
-			animate={{ 
+			animate={{
 				y: [0, -yOffset, 0],
-				x: [0, xOffset, 0] 
+				x: [0, xOffset, 0],
 			}}
 			transition={{
 				duration: duration,
