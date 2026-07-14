@@ -9,6 +9,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { authAttempts, comments, posts } from "@/lib/db/schema";
 import { createSession, deleteSession, verifySession } from "@/lib/session";
+import { CreatePostSchema } from "@/lib/validations/post";
 
 // ─── addComment ─────────────────────────────────────────────────────────────
 
@@ -176,26 +177,11 @@ export async function logoutAction() {
 
 // ─── Post Management ─────────────────────────────────────────────────────────
 
-const CreatePostSchema = z.object({
-	id: z.string().nullable().optional(), // For edits
-	title: z
-		.string()
-		.min(1, "Title is required")
-		.max(200, "Title must be 200 characters or fewer"),
-	slug: z
-		.string()
-		.min(1, "Slug is required")
-		.refine(
-			(val) => /^[a-z0-9-]+$/.test(val),
-			"Slug must only contain lowercase letters, numbers, and hyphens",
-		),
-	body: z.string().min(1, "Body is required"),
-	tags: z.string().optional(),
-	published: z.enum(["true", "false"]).optional(),
-});
+// Removed CreatePostSchema (imported from validations)
 
 export type CreatePostState = {
 	success: boolean;
+	id?: string;
 	errors?: {
 		title?: string[];
 		slug?: string[];
@@ -270,7 +256,95 @@ export async function savePost(
 	redirect("/admin/posts");
 }
 
+export async function autoSavePost(
+	_prevState: CreatePostState,
+	formData: FormData,
+): Promise<CreatePostState> {
+	// Require Auth
+	const session = await verifySession();
+	if (!session) return { success: false, errors: { _form: ["Unauthorized"] } };
+
+	const raw = {
+		id: formData.get("id"),
+		title: formData.get("title"),
+		slug: formData.get("slug"),
+		body: formData.get("body"),
+		tags: formData.get("tags"),
+		published: formData.get("published"),
+	};
+
+	const result = CreatePostSchema.safeParse(raw);
+	if (!result.success) {
+		return { success: false, errors: result.error.flatten().fieldErrors };
+	}
+
+	const tagArray = result.data.tags
+		? result.data.tags
+				.split(",")
+				.map((t) => t.trim())
+				.filter(Boolean)
+		: [];
+	const isPublished = result.data.published === "true";
+
+	let postId = result.data.id;
+
+	try {
+		if (postId) {
+			await db
+				.update(posts)
+				.set({
+					title: result.data.title,
+					slug: result.data.slug,
+					body: result.data.body,
+					tags: tagArray,
+					published: isPublished,
+				})
+				.where(eq(posts.id, postId));
+		} else {
+			const inserted = await db
+				.insert(posts)
+				.values({
+					title: result.data.title,
+					slug: result.data.slug,
+					body: result.data.body,
+					tags: tagArray,
+					published: isPublished,
+				})
+				.returning({ id: posts.id });
+
+			postId = inserted[0].id;
+		}
+	} catch (_error) {
+		return {
+			success: false,
+			errors: {
+				_form: ["Failed to auto-save post. The slug may already be taken."],
+			},
+		};
+	}
+
+	return { success: true, id: postId ?? "" };
+}
+
 export async function deletePost(id: string) {
+	const session = await verifySession();
+	if (!session) throw new Error("Unauthorized");
+
+	await db.update(posts).set({ deletedAt: new Date() }).where(eq(posts.id, id));
+	revalidatePath("/blog");
+	revalidatePath("/admin/posts");
+}
+
+export async function restorePost(id: string) {
+	const session = await verifySession();
+	if (!session) throw new Error("Unauthorized");
+
+	await db.update(posts).set({ deletedAt: null }).where(eq(posts.id, id));
+	revalidatePath("/blog");
+	revalidatePath("/admin/posts");
+}
+
+export async function hardDeletePost(id: string) {
 	const session = await verifySession();
 	if (!session) throw new Error("Unauthorized");
 
@@ -308,6 +382,34 @@ export async function bulkApproveComments(ids: string[]) {
 }
 
 export async function bulkDeleteComments(ids: string[]) {
+	const session = await verifySession();
+	if (!session) throw new Error("Unauthorized");
+
+	for (const id of ids) {
+		await db
+			.update(comments)
+			.set({ deletedAt: new Date() })
+			.where(eq(comments.id, id));
+	}
+	revalidatePath("/blog", "layout");
+	revalidatePath("/admin/comments");
+}
+
+export async function bulkRestoreComments(ids: string[]) {
+	const session = await verifySession();
+	if (!session) throw new Error("Unauthorized");
+
+	for (const id of ids) {
+		await db
+			.update(comments)
+			.set({ deletedAt: null })
+			.where(eq(comments.id, id));
+	}
+	revalidatePath("/blog", "layout");
+	revalidatePath("/admin/comments");
+}
+
+export async function bulkHardDeleteComments(ids: string[]) {
 	const session = await verifySession();
 	if (!session) throw new Error("Unauthorized");
 
