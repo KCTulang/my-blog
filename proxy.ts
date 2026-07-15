@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function proxy(request: NextRequest) {
 	const sessionCookie =
@@ -22,18 +22,18 @@ export async function proxy(request: NextRequest) {
 				cookie: request.headers.get("cookie") || "",
 			},
 		});
-		
+
 		const sessionData = await res.json().catch(() => null);
 		const isValidSession = !!sessionData?.session;
 
 		if (!isValidSession && !isLoginPage) {
 			return NextResponse.redirect(new URL("/admin", request.url));
 		}
-		
+
 		if (isValidSession && isLoginPage) {
 			return NextResponse.redirect(new URL("/admin/posts", request.url));
 		}
-	} catch (e) {
+	} catch {
 		if (!isLoginPage) {
 			return NextResponse.redirect(new URL("/admin", request.url));
 		}
@@ -43,9 +43,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-	matcher: [
-		"/admin",
-		"/admin/posts/:path*",
-		"/admin/comments/:path*",
-	],
+	matcher: ["/admin", "/admin/posts/:path*", "/admin/comments/:path*"],
 };

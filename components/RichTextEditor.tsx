@@ -141,7 +141,8 @@ const extensions = [
 	Link.configure({
 		openOnClick: false,
 		HTMLAttributes: {
-			class: "text-light-blue hover:text-white transition-colors cursor-pointer",
+			class:
+				"text-light-blue hover:text-white transition-colors cursor-pointer",
 		},
 	}),
 ];
