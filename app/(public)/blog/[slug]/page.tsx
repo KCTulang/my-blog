@@ -6,16 +6,18 @@ import { db } from "@/lib/db";
 import { verifySession } from "@/lib/session";
 
 async function CommentList({ postId }: { postId: string }) {
-	const post = await db.query.posts.findFirst({
-		where: (p, { eq }) => eq(p.id, postId),
-		with: {
-			comments: {
-				where: (c, { and, eq, isNull }) =>
-					and(eq(c.approved, true), isNull(c.deletedAt)),
-				orderBy: (c, { asc }) => [asc(c.createdAt)],
+	const post = await db.query.posts
+		.findFirst({
+			where: (p, { eq }) => eq(p.id, postId),
+			with: {
+				comments: {
+					where: (c, { and, eq, isNull }) =>
+						and(eq(c.approved, true), isNull(c.deletedAt)),
+					orderBy: (c, { asc }) => [asc(c.createdAt)],
+				},
 			},
-		},
-	});
+		})
+		.catch(() => null);
 
 	const comments = post?.comments ?? [];
 
@@ -63,10 +65,12 @@ interface PostPageProps {
 export default async function PostPage({ params }: PostPageProps) {
 	const { slug } = await params;
 
-	const post = await db.query.posts.findFirst({
-		where: (p, { and, eq, isNull }) =>
-			and(eq(p.slug, slug), isNull(p.deletedAt)),
-	});
+	const post = await db.query.posts
+		.findFirst({
+			where: (p, { and, eq, isNull }) =>
+				and(eq(p.slug, slug), isNull(p.deletedAt)),
+		})
+		.catch(() => null);
 
 	if (!post) {
 		notFound();
@@ -79,12 +83,14 @@ export default async function PostPage({ params }: PostPageProps) {
 		}
 	}
 
-	const recentPosts = await db.query.posts.findMany({
-		where: (p, { eq, isNull, and, ne }) =>
-			and(eq(p.published, true), isNull(p.deletedAt), ne(p.id, post.id)),
-		orderBy: (p, { desc }) => [desc(p.createdAt)],
-		limit: 10,
-	});
+	const recentPosts = await db.query.posts
+		.findMany({
+			where: (p, { eq, isNull, and, ne }) =>
+				and(eq(p.published, true), isNull(p.deletedAt), ne(p.id, post.id)),
+			orderBy: (p, { desc }) => [desc(p.createdAt)],
+			limit: 10,
+		})
+		.catch(() => []);
 
 	return (
 		<div className="relative flex flex-1 flex-col">

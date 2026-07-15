@@ -6,14 +6,16 @@ import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
 
 async function CommentCount({ postId }: { postId: string }) {
-	const post = await db.query.posts.findFirst({
-		where: (p, { eq }) => eq(p.id, postId),
-		with: {
-			comments: {
-				where: (c, { eq }) => eq(c.approved, true),
+	const post = await db.query.posts
+		.findFirst({
+			where: (p, { eq }) => eq(p.id, postId),
+			with: {
+				comments: {
+					where: (c, { eq }) => eq(c.approved, true),
+				},
 			},
-		},
-	});
+		})
+		.catch(() => null);
 	const count = post?.comments.length ?? 0;
 	return (
 		<span className="text-xs text-zinc-500">
@@ -63,7 +65,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 	const tagRows = await db
 		.select({ tags: posts.tags })
 		.from(posts)
-		.where(isNull(posts.deletedAt));
+		.where(isNull(posts.deletedAt))
+		.catch(() => []);
 	const allTags = [...new Set(tagRows.flatMap((r) => r.tags))].sort();
 
 	const baseQuery = db
@@ -71,8 +74,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 		.from(posts)
 		.where(and(eq(posts.published, true), isNull(posts.deletedAt)))
 		.orderBy(desc(posts.createdAt));
-	const postList = tag
-		? await db
+
+	const postList = await (tag
+		? db
 				.select()
 				.from(posts)
 				.where(
@@ -83,7 +87,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 					),
 				)
 				.orderBy(desc(posts.createdAt))
-		: await baseQuery;
+		: baseQuery
+	).catch(() => []);
 
 	return (
 		<div className="relative flex flex-1 flex-col overflow-hidden">
