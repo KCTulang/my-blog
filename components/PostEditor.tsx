@@ -3,10 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
-import RichTextEditor from "./RichTextEditor";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { autoSavePost, savePost } from "@/lib/actions";
 import { CreatePostSchema } from "@/lib/validations/post";
+import RichTextEditor from "./RichTextEditor";
 
 type Post = {
 	id: string;
@@ -220,9 +220,7 @@ export default function PostEditor({ post }: { post?: Post }) {
 
 				{/* Body */}
 				<div>
-					<label
-						className="mb-2 block text-xs font-medium text-zinc-400"
-					>
+					<label className="mb-2 block text-xs font-medium text-zinc-400">
 						Body
 					</label>
 					<Controller

@@ -17,7 +17,8 @@ export default async function PostsCarouselSection() {
 			id: p.id,
 			title: p.title,
 			slug: p.slug,
-			excerpt: plainText.length > 80 ? `${plainText.substring(0, 80)}...` : plainText,
+			excerpt:
+				plainText.length > 80 ? `${plainText.substring(0, 80)}...` : plainText,
 		};
 	});
 

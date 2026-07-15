@@ -1,17 +1,17 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import {
 	Bold,
-	Italic,
-	Strikethrough,
+	Code,
 	Heading2,
+	Italic,
 	List,
 	ListOrdered,
 	Quote,
-	Code,
+	Strikethrough,
 } from "lucide-react";
 import { useEffect } from "react";
 
@@ -63,7 +63,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
 			>
 				<Strikethrough size={16} />
 			</button>
-			
+
 			<div className="w-[1px] h-4 bg-white/10 mx-1" />
 
 			<button
@@ -136,14 +136,18 @@ const MenuBar = ({ editor }: { editor: any }) => {
 	);
 };
 
-export default function RichTextEditor({ value, onChange }: RichTextEditorProps) {
+export default function RichTextEditor({
+	value,
+	onChange,
+}: RichTextEditorProps) {
 	const editor = useEditor({
 		extensions: [
 			StarterKit,
 			Link.configure({
 				openOnClick: false,
 				HTMLAttributes: {
-					class: "text-light-blue hover:text-white transition-colors cursor-pointer",
+					class:
+						"text-light-blue hover:text-white transition-colors cursor-pointer",
 				},
 			}),
 		],
@@ -153,7 +157,8 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
 		},
 		editorProps: {
 			attributes: {
-				class: "prose prose-invert max-w-none text-zinc-300 prose-headings:text-white prose-p:text-zinc-300 prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6 prose-li:my-1 min-h-[300px] w-full resize-y bg-white/5 px-4 py-4 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-0",
+				class:
+					"prose prose-invert max-w-none text-zinc-300 prose-headings:text-white prose-p:text-zinc-300 prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6 prose-li:my-1 min-h-[300px] w-full resize-y bg-white/5 px-4 py-4 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-0",
 			},
 		},
 	});
