@@ -130,14 +130,13 @@ export default async function PostPage({ params }: PostPageProps) {
 						</time>
 
 						{/* Post body — styled with Tailwind Typography. Explicit text colors applied to fix typography plugin dark mode issues */}
-						<div
-							className="prose max-w-none text-zinc-300 prose-p:leading-relaxed prose-p:text-zinc-300 prose-headings:font-serif prose-headings:text-white prose-a:text-light-blue hover:prose-a:text-white prose-strong:text-white prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6 prose-li:my-1 prose-li:text-zinc-300"
-							dangerouslySetInnerHTML={{ __html: post.body }}
-						/>
+						<div className="prose max-w-none text-zinc-300 prose-p:leading-relaxed prose-p:text-zinc-300 prose-headings:font-serif prose-headings:text-white prose-a:text-light-blue hover:prose-a:text-white prose-strong:text-white prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6 prose-li:my-1 prose-li:text-zinc-300">
+							{post.body}
+						</div>
 					</article>
 
 					{/* ── RIGHT COLUMN: SIDEBAR ── */}
-					<div className="w-full lg:w-[320px] xl:w-[380px] shrink-0 flex flex-col gap-10 lg:sticky lg:top-32">
+					<div className="w-full lg:w-[320px] xl:w-95 shrink-0 flex flex-col gap-10 lg:sticky lg:top-32">
 						{/* Comments Card */}
 						<div className="card-glass-dim rounded-3xl border border-white/10 p-6 sm:p-8 flex flex-col gap-8">
 							{/* Comment list */}

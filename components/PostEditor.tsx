@@ -220,17 +220,21 @@ export default function PostEditor({ post }: { post?: Post }) {
 
 				{/* Body */}
 				<div>
-					<label className="mb-2 block text-xs font-medium text-zinc-400">
+					<label
+						htmlFor="admin-body"
+						className="mb-2 block text-xs font-medium text-zinc-400"
+					>
 						Body
 					</label>
-					<Controller
-						name="body"
-						control={control}
-						render={({ field }) => (
-							<RichTextEditor value={field.value} onChange={field.onChange} />
-						)}
-					/>
-					<FieldError message={errors.body?.message} />
+					<div id="admin-body">
+						<Controller
+							name="body"
+							control={control}
+							render={({ field }) => (
+								<RichTextEditor value={field.value} onChange={field.onChange} />
+							)}
+						/>
+					</div>
 				</div>
 
 				{/* Tags */}

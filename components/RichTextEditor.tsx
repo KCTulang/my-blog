@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "@tiptap/extension-link";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { type Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {
 	Bold,
@@ -20,7 +20,7 @@ interface RichTextEditorProps {
 	onChange: (value: string) => void;
 }
 
-const MenuBar = ({ editor }: { editor: any }) => {
+const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	if (!editor) {
 		return null;
 	}
@@ -64,7 +64,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
 				<Strikethrough size={16} />
 			</button>
 
-			<div className="w-[1px] h-4 bg-white/10 mx-1" />
+			<div className="w-px h-4 bg-white/10 mx-1" />
 
 			<button
 				type="button"
@@ -79,7 +79,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
 				<Heading2 size={16} />
 			</button>
 
-			<div className="w-[1px] h-4 bg-white/10 mx-1" />
+			<div className="w-px h-4 bg-white/10 mx-1" />
 
 			<button
 				type="button"
@@ -118,7 +118,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
 				<Quote size={16} />
 			</button>
 
-			<div className="w-[1px] h-4 bg-white/10 mx-1" />
+			<div className="w-px h-4 bg-white/10 mx-1" />
 
 			<button
 				type="button"
@@ -145,6 +145,7 @@ export default function RichTextEditor({
 			StarterKit,
 			Link.configure({
 				openOnClick: false,
+				// biome-ignore lint/style/useNamingConvention: Tiptap requires HTMLAttributes to be capitalized
 				HTMLAttributes: {
 					class:
 						"text-light-blue hover:text-white transition-colors cursor-pointer",
