@@ -75,6 +75,12 @@ export async function addComment(
 }
 
 export async function logoutAction() {
+	await import("@/lib/auth").then(async ({ auth }) => {
+		const { headers } = await import("next/headers");
+		await auth.api.signOut({
+			headers: await headers(),
+		});
+	});
 	redirect("/");
 }
 
