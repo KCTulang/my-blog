@@ -1,3 +1,4 @@
+import parse from "html-react-parser";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -124,7 +125,7 @@ export default async function PostPage({ params }: PostPageProps) {
 						</time>
 
 						<div className="prose max-w-none text-zinc-300 prose-p:leading-relaxed prose-p:text-zinc-300 prose-headings:font-serif prose-headings:text-white prose-a:text-light-blue hover:prose-a:text-white prose-strong:text-white prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6 prose-li:my-1 prose-li:text-zinc-300">
-							{post.body}
+							{parse(post.body)}
 						</div>
 					</article>
 

@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import {
 	Bold,
 	Code,
+	Eraser,
 	Heading2,
 	Italic,
 	List,
@@ -132,25 +133,41 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 			>
 				<Code size={16} />
 			</button>
+
+			<div className="w-px h-4 bg-white/10 mx-1" />
+
+			<button
+				type="button"
+				onClick={() =>
+					editor.chain().focus().clearNodes().unsetAllMarks().run()
+				}
+				className="p-1.5 rounded-md transition-colors text-zinc-400 hover:bg-white/10 hover:text-white"
+				title="Clear Formatting"
+			>
+				<Eraser size={16} />
+			</button>
 		</div>
 	);
 };
+
+const extensions = [
+	StarterKit,
+	Link.configure({
+		openOnClick: false,
+		HTMLAttributes: {
+			class:
+				"text-light-blue hover:text-white transition-colors cursor-pointer",
+		},
+	}),
+];
 
 export default function RichTextEditor({
 	value,
 	onChange,
 }: RichTextEditorProps) {
 	const editor = useEditor({
-		extensions: [
-			StarterKit,
-			Link.configure({
-				openOnClick: false,
-				HTMLAttributes: {
-					class:
-						"text-light-blue hover:text-white transition-colors cursor-pointer",
-				},
-			}),
-		],
+		immediatelyRender: false,
+		extensions,
 		content: value,
 		onUpdate: ({ editor }) => {
 			onChange(editor.getHTML());
@@ -165,7 +182,7 @@ export default function RichTextEditor({
 
 	// Keep editor content in sync if value changes externally (e.g. form reset)
 	useEffect(() => {
-		if (editor && value !== editor.getHTML()) {
+		if (editor && value !== editor.getHTML() && !editor.isFocused) {
 			editor.commands.setContent(value);
 		}
 	}, [value, editor]);

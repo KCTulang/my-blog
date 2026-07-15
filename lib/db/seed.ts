@@ -32,19 +32,20 @@ async function main() {
 				{
 					title: "Welcome to Loonary",
 					slug: "welcome-to-loonary-final",
-					body: "This is the very first post on my new moonlit digital diary. Inspired by my dog Loona, and built for sharing stories.",
-					tags: ["personal", "intro"],
+					body: "<p>This is a <strong>sample post</strong>. Welcome to your new moonlit digital diary. Share your thoughts, document your journey, and let your ideas shine like stars in the night sky.</p><h3>Features:</h3><ul><li>Rich text editing</li><li>Password-protected admin area</li><li>Minimal, beautiful design</li></ul>",
+					tags: ["Welcome", "Updates"],
+					published: true,
 				},
 				{
 					title: "The Phases of the Moon",
 					slug: "phases-of-the-moon",
-					body: "Just like the moon, we go through phases. Today I want to write about embracing change and the beauty of starting over.",
+					body: "<p>Just like the moon, we go through phases. Today I want to write about embracing change and the beauty of starting over.</p>",
 					tags: ["personal", "reflection"],
 				},
 				{
 					title: "Building a Full-Stack Blog",
 					slug: "building-full-stack-blog",
-					body: "This week I started a 10-day sprint to build this very blog using Next.js, Neon Postgres, and Drizzle ORM!",
+					body: "<p>This week I started a 10-day sprint to build this very blog using Next.js, Neon Postgres, and Drizzle ORM!</p>",
 					tags: ["tech", "nextjs"],
 				},
 			])
