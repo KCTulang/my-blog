@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 	robots: { index: false, follow: false },
 };
 
+
 async function AuthCheck() {
 	const session = await verifySession();
 	if (session) redirect("/admin/posts");
@@ -17,6 +18,7 @@ async function AuthCheck() {
 }
 
 export default function AdminLoginPage() {
+
 	return (
 		<div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden">
 			{/* Ambient background matching homepage */}
