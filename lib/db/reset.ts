@@ -10,8 +10,9 @@ async function main() {
 
 	const sql = neon(process.env.DATABASE_URL);
 
-	console.log("⏳ Dropping all tables in the public schema...");
-	await sql`DROP SCHEMA public CASCADE;`;
+	console.log("⏳ Dropping all tables in the public and drizzle schemas...");
+	await sql`DROP SCHEMA IF EXISTS public CASCADE;`;
+	await sql`DROP SCHEMA IF EXISTS drizzle CASCADE;`;
 
 	console.log("⏳ Recreating public schema...");
 	await sql`CREATE SCHEMA public;`;
