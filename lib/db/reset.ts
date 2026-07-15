@@ -1,5 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { config } from "dotenv";
+
 config({ path: ".env.local" });
 
 async function main() {
@@ -11,10 +12,10 @@ async function main() {
 
 	console.log("⏳ Dropping all tables in the public schema...");
 	await sql`DROP SCHEMA public CASCADE;`;
-	
+
 	console.log("⏳ Recreating public schema...");
 	await sql`CREATE SCHEMA public;`;
-	
+
 	console.log("✅ Database successfully reset!");
 }
 
