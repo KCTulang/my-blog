@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface BlogPostCardProps {
 	post: {
@@ -20,6 +20,8 @@ export default function BlogPostCard({
 	post,
 	commentCountSlot,
 }: BlogPostCardProps) {
+	const plainText = post.body.replace(/<[^>]*>?/gm, "");
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
@@ -46,9 +48,9 @@ export default function BlogPostCard({
 				</time>
 				{/* Excerpt — 3 lines on mobile, uncapped on sm+ */}
 				<p className="line-clamp-3 text-sm font-light leading-relaxed text-zinc-400 sm:line-clamp-none">
-					{post.body.length > 160
-						? `${post.body.substring(0, 160)}…`
-						: post.body}
+					{plainText.length > 160
+						? `${plainText.substring(0, 160)}…`
+						: plainText}
 				</p>
 
 				{/* Tags */}

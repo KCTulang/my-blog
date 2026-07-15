@@ -11,12 +11,16 @@ export default async function PostsCarouselSection() {
 		with: { comments: true },
 	});
 
-	const posts: BlogPost[] = rawPosts.map((p) => ({
-		id: p.id,
-		title: p.title,
-		slug: p.slug,
-		excerpt: p.body.length > 80 ? `${p.body.substring(0, 80)}...` : p.body,
-	}));
+	const posts: BlogPost[] = rawPosts.map((p) => {
+		const plainText = p.body.replace(/<[^>]*>?/gm, "");
+		return {
+			id: p.id,
+			title: p.title,
+			slug: p.slug,
+			excerpt:
+				plainText.length > 80 ? `${plainText.substring(0, 80)}...` : plainText,
+		};
+	});
 
 	return <FeaturedBlogCarousel posts={posts} />;
 }

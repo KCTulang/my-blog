@@ -61,6 +61,16 @@
 					}
 				}
 			}
+		},
+		{
+			"includes": ["components/RichTextEditor.tsx"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useNamingConvention": "off"
+					}
+				}
+			}
 		}
 	]
 }

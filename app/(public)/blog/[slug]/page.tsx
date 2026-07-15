@@ -87,14 +87,22 @@ export default async function PostPage({ params }: PostPageProps) {
 		}
 	}
 
+	// Fetch recent posts for sidebar navigation
+	const recentPosts = await db.query.posts.findMany({
+		where: (p, { eq, isNull, and, ne }) =>
+			and(eq(p.published, true), isNull(p.deletedAt), ne(p.id, post.id)),
+		orderBy: (p, { desc }) => [desc(p.createdAt)],
+		limit: 10,
+	});
+
 	return (
-		<div className="relative flex flex-1 flex-col overflow-hidden">
+		<div className="relative flex flex-1 flex-col">
 			<div
 				aria-hidden="true"
 				className="ambient-glow-post pointer-events-none absolute inset-0 z-0"
 			/>
 
-			<main className="relative z-10 mx-auto w-full max-w-2xl flex-1 px-4 pb-20 pt-24 sm:px-6 sm:pt-28">
+			<main className="relative z-10 mx-auto w-full max-w-7xl flex-1 px-4 pb-20 pt-24 sm:px-6 sm:pt-28 lg:px-8">
 				{/* Back link — min touch target via py-3 */}
 				<Link
 					href="/blog"
@@ -103,50 +111,81 @@ export default async function PostPage({ params }: PostPageProps) {
 					← All stories
 				</Link>
 
-				{/* Post header */}
-				<article>
-					{/* Title scales down on mobile: text-2xl → sm:text-3xl → sm:text-4xl */}
-					<h1 className="mb-3 font-serif text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl">
-						{post.title}
-					</h1>
-					<time
-						dateTime={post.createdAt.toISOString()}
-						className="mb-8 block text-sm text-zinc-500"
-					>
-						{post.createdAt.toLocaleDateString("en-US", {
-							year: "numeric",
-							month: "long",
-							day: "numeric",
-						})}
-					</time>
+				<div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
+					{/* ── LEFT COLUMN: BLOG POST ── */}
+					<article className="flex-1 w-full lg:max-w-4xl card-glass-dim rounded-3xl border border-white/10 p-6 sm:p-10 lg:p-12">
+						{/* Title scales down on mobile: text-2xl → sm:text-3xl → sm:text-4xl */}
+						<h1 className="mb-3 font-serif text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl">
+							{post.title}
+						</h1>
+						<time
+							dateTime={post.createdAt.toISOString()}
+							className="mb-8 block text-sm text-zinc-500"
+						>
+							{post.createdAt.toLocaleDateString("en-US", {
+								year: "numeric",
+								month: "long",
+								day: "numeric",
+							})}
+						</time>
 
-					{/* Post body — flat surface (no glass), intentional for readability */}
-					<div className="prose prose-invert prose-zinc max-w-none">
-						<p className="wrap-break-word text-base font-light leading-relaxed text-zinc-300 whitespace-pre-wrap">
+						{/* Post body — styled with Tailwind Typography. Explicit text colors applied to fix typography plugin dark mode issues */}
+						<div className="prose max-w-none text-zinc-300 prose-p:leading-relaxed prose-p:text-zinc-300 prose-headings:font-serif prose-headings:text-white prose-a:text-light-blue hover:prose-a:text-white prose-strong:text-white prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6 prose-li:my-1 prose-li:text-zinc-300">
 							{post.body}
-						</p>
+						</div>
+					</article>
+
+					{/* ── RIGHT COLUMN: SIDEBAR ── */}
+					<div className="w-full lg:w-[320px] xl:w-95 shrink-0 flex flex-col gap-10 lg:sticky lg:top-32">
+						{/* Comments Card */}
+						<div className="card-glass-dim rounded-3xl border border-white/10 p-6 sm:p-8 flex flex-col gap-8">
+							{/* Comment list */}
+							<section>
+								<h2 className="mb-6 font-serif text-xl font-semibold text-white">
+									Comments
+								</h2>
+								<Suspense
+									fallback={
+										<div className="h-20 w-full animate-pulse rounded bg-white/5" />
+									}
+								>
+									<CommentList postId={post.id} />
+								</Suspense>
+							</section>
+
+							{/* Comment form */}
+							<CommentForm postId={post.id} slug={post.slug} />
+						</div>
+
+						{/* Divider for mobile only */}
+						<hr className="block lg:hidden my-2 border-white/10" />
+
+						{/* More Posts Navigation */}
+						<section className="card-glass-dim rounded-3xl border border-white/10 p-6 sm:p-8">
+							<h2 className="mb-5 font-serif text-xl font-semibold text-white">
+								More Posts
+							</h2>
+							<ul className="flex flex-col gap-4">
+								{recentPosts.length === 0 ? (
+									<li className="text-sm text-zinc-500 italic">
+										No other posts found.
+									</li>
+								) : (
+									recentPosts.map((rp) => (
+										<li key={rp.id}>
+											<Link
+												href={`/blog/${rp.slug}`}
+												className="block text-sm font-light text-zinc-400 hover:text-white transition-colors"
+											>
+												{rp.title}
+											</Link>
+										</li>
+									))
+								)}
+							</ul>
+						</section>
 					</div>
-				</article>
-
-				{/* Divider */}
-				<hr className="my-10 border-white/10 sm:my-12" />
-
-				{/* Comment list */}
-				<section>
-					<h2 className="mb-6 font-serif text-xl font-semibold text-white sm:text-2xl">
-						Comments
-					</h2>
-					<Suspense
-						fallback={
-							<div className="h-20 w-full animate-pulse rounded bg-white/5" />
-						}
-					>
-						<CommentList postId={post.id} />
-					</Suspense>
-				</section>
-
-				{/* Comment form */}
-				<CommentForm postId={post.id} slug={post.slug} />
+				</div>
 			</main>
 		</div>
 	);

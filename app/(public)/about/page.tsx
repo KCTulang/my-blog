@@ -32,11 +32,8 @@ export default function AboutPage() {
 				</div>
 
 				<div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-stretch">
-					
 					{/* ── LEFT COLUMN: CONTENT ── */}
 					<div className="flex flex-1 flex-col w-full lg:max-w-2xl">
-
-
 						<div className="flex flex-col gap-6">
 							{/* ── ABOUT THE BLOG ── */}
 							<FadeInUp delay={0.1}>
@@ -46,14 +43,14 @@ export default function AboutPage() {
 									</h2>
 									<p className="mb-4 text-sm font-light leading-relaxed text-zinc-400 sm:text-base">
 										Loonary is a personal space for thoughts, stories, and
-										reflections — written under the quiet glow of the moon. Inspired
-										by a dachshund named Loona, it's equal parts diary, tech notes,
-										and life musings.
+										reflections — written under the quiet glow of the moon.
+										Inspired by a dachshund named Loona, it's equal parts diary,
+										tech notes, and life musings.
 									</p>
 									<p className="text-sm font-light leading-relaxed text-zinc-400 sm:text-base">
-										Built with Next.js, Neon Postgres, and Drizzle ORM as part of a
-										full-stack capstone project — and designed to feel warm, calm,
-										and a little bit magical.
+										Built with Next.js, Neon Postgres, and Drizzle ORM as part
+										of a full-stack capstone project — and designed to feel
+										warm, calm, and a little bit magical.
 									</p>
 								</div>
 							</FadeInUp>
@@ -65,10 +62,10 @@ export default function AboutPage() {
 										The Writer
 									</h2>
 									<p className="text-sm font-light leading-relaxed text-zinc-400">
-										Hi, I'm Kenneth Claire — a developer who writes code by day and
-										stories by night. I built this blog to practice shipping real
-										full-stack projects and to have a cozy corner of the internet to
-										call my own.
+										Hi, I'm Kenneth Claire — a developer who writes code by day
+										and stories by night. I built this blog to practice shipping
+										real full-stack projects and to have a cozy corner of the
+										internet to call my own.
 									</p>
 								</div>
 							</FadeInUp>
@@ -80,15 +77,14 @@ export default function AboutPage() {
 										The Dog
 									</h2>
 									<p className="text-sm font-light leading-relaxed text-zinc-400">
-										Loona is a miniature dachshund and the true mascot of this blog.
-										She doesn't write posts (yet), but she provides moral support,
-										warmth, and the occasional dramatic sigh. The blog is named
-										after her.
+										Loona is a miniature dachshund and the true mascot of this
+										blog. She doesn't write posts (yet), but she provides moral
+										support, warmth, and the occasional dramatic sigh. The blog
+										is named after her.
 									</p>
 								</div>
 							</FadeInUp>
 						</div>
-
 					</div>
 
 					{/* ── RIGHT COLUMN: LOONA IMAGE & EXTRAS ── */}
@@ -99,7 +95,7 @@ export default function AboutPage() {
 								<FloatingElement
 									yOffset={15}
 									duration={5}
-									className="relative h-[300px] sm:h-[400px] lg:h-[450px] w-full"
+									className="relative h-75 sm:h-100 lg:h-112.5 w-full"
 								>
 									<Image
 										src="/Loona-hero-v2.png"
@@ -138,7 +134,10 @@ export default function AboutPage() {
 									))}
 								</div>
 								<p className="text-sm font-light leading-relaxed text-zinc-400">
-									Loonary is built to be fast, smooth, and beautiful. It leverages modern web technologies to deliver a rich, app-like experience while remaining statically optimized and completely open for the world to read.
+									Loonary is built to be fast, smooth, and beautiful. It
+									leverages modern web technologies to deliver a rich, app-like
+									experience while remaining statically optimized and completely
+									open for the world to read.
 								</p>
 							</div>
 						</FadeInUp>
