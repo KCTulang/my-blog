@@ -3,9 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
+import RichTextEditor from "./RichTextEditor";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -80,6 +81,7 @@ export default function PostEditor({ post }: { post?: Post }) {
 		watch,
 		handleSubmit,
 		setValue,
+		control,
 		formState: { errors, isSubmitting, isDirty },
 	} = form;
 
@@ -219,17 +221,16 @@ export default function PostEditor({ post }: { post?: Post }) {
 				{/* Body */}
 				<div>
 					<label
-						htmlFor="admin-body"
-						className="mb-1 block text-xs font-medium text-zinc-400"
+						className="mb-2 block text-xs font-medium text-zinc-400"
 					>
 						Body
 					</label>
-					<textarea
-						id="admin-body"
-						rows={10}
-						{...register("body")}
-						placeholder="Write your post here…"
-						className="min-h-50 w-full resize-y rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
+					<Controller
+						name="body"
+						control={control}
+						render={({ field }) => (
+							<RichTextEditor value={field.value} onChange={field.onChange} />
+						)}
 					/>
 					<FieldError message={errors.body?.message} />
 				</div>
