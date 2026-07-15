@@ -5,7 +5,6 @@ import BlogPostCard from "@/components/BlogPostCard";
 import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
 
-// Dynamic comment count
 async function CommentCount({ postId }: { postId: string }) {
 	const post = await db.query.posts.findFirst({
 		where: (p, { eq }) => eq(p.id, postId),
@@ -23,7 +22,6 @@ async function CommentCount({ postId }: { postId: string }) {
 	);
 }
 
-// Tag filter bar — horizontal scroll on mobile so it never wraps to multiple lines
 function TagFilterBar({
 	tags,
 	activeTag,
@@ -62,14 +60,12 @@ interface BlogPageProps {
 export default async function BlogPage({ searchParams }: BlogPageProps) {
 	const { tag } = await searchParams;
 
-	// Collect all unique tags across all posts for the filter bar
 	const tagRows = await db
 		.select({ tags: posts.tags })
 		.from(posts)
 		.where(isNull(posts.deletedAt));
 	const allTags = [...new Set(tagRows.flatMap((r) => r.tags))].sort();
 
-	// Fetch published posts
 	const baseQuery = db
 		.select()
 		.from(posts)
@@ -104,7 +100,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 					a moonlit digital diary
 				</p>
 
-				{/* Tag filter bar — horizontally scrollable on mobile */}
 				<TagFilterBar tags={allTags} activeTag={tag} />
 
 				{postList.length === 0 ? (
