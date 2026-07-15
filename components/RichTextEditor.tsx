@@ -136,21 +136,23 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	);
 };
 
+const extensions = [
+	StarterKit,
+	Link.configure({
+		openOnClick: false,
+		HTMLAttributes: {
+			class: "text-light-blue hover:text-white transition-colors cursor-pointer",
+		},
+	}),
+];
+
 export default function RichTextEditor({
 	value,
 	onChange,
 }: RichTextEditorProps) {
 	const editor = useEditor({
-		extensions: [
-			StarterKit,
-			Link.configure({
-				openOnClick: false,
-				HTMLAttributes: {
-					class:
-						"text-light-blue hover:text-white transition-colors cursor-pointer",
-				},
-			}),
-		],
+		immediatelyRender: false,
+		extensions,
 		content: value,
 		onUpdate: ({ editor }) => {
 			onChange(editor.getHTML());
@@ -165,7 +167,7 @@ export default function RichTextEditor({
 
 	// Keep editor content in sync if value changes externally (e.g. form reset)
 	useEffect(() => {
-		if (editor && value !== editor.getHTML()) {
+		if (editor && value !== editor.getHTML() && !editor.isFocused) {
 			editor.commands.setContent(value);
 		}
 	}, [value, editor]);
