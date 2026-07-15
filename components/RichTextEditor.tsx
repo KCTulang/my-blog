@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import {
 	Bold,
 	Code,
+	Eraser,
 	Heading2,
 	Italic,
 	List,
@@ -131,6 +132,19 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				title="Code Block"
 			>
 				<Code size={16} />
+			</button>
+
+			<div className="w-px h-4 bg-white/10 mx-1" />
+
+			<button
+				type="button"
+				onClick={() =>
+					editor.chain().focus().clearNodes().unsetAllMarks().run()
+				}
+				className="p-1.5 rounded-md transition-colors text-zinc-400 hover:bg-white/10 hover:text-white"
+				title="Clear Formatting"
+			>
+				<Eraser size={16} />
 			</button>
 		</div>
 	);
