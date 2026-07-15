@@ -1,17 +1,13 @@
 "use server";
 
-import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { authAttempts, comments, posts } from "@/lib/db/schema";
-import { createSession, deleteSession, verifySession } from "@/lib/session";
+import { comments, posts } from "@/lib/db/schema";
+import { verifySession } from "@/lib/session";
 import { CreatePostSchema } from "@/lib/validations/post";
-
-// ─── addComment ─────────────────────────────────────────────────────────────
 
 const AddCommentSchema = z.object({
 	postId: z.string().uuid("Invalid post ID"),
@@ -62,7 +58,6 @@ export async function addComment(
 			postId: result.data.postId,
 			authorName: result.data.authorName,
 			body: result.data.body,
-			// If admin is adding a comment (e.g. reply), auto-approve it
 			approved: result.data.authorName === "Admin",
 		});
 
@@ -79,105 +74,9 @@ export async function addComment(
 	}
 }
 
-// ─── Auth / Login ───────────────────────────────────────────────────────────
-
-export type LoginState = {
-	success: boolean;
-	errors?: {
-		password?: string[];
-		_form?: string[];
-	};
-};
-
-export async function loginAction(
-	_prevState: LoginState,
-	formData: FormData,
-): Promise<LoginState> {
-	const password = formData.get("password") as string;
-	if (!password) {
-		return { success: false, errors: { password: ["Password is required"] } };
-	}
-
-	// 1. Rate limiting check by IP
-	const headersList = await headers();
-	// Fallback to "unknown" if headers are missing
-	const ip =
-		headersList.get("x-forwarded-for") ||
-		headersList.get("x-real-ip") ||
-		"unknown";
-
-	// Fetch existing attempts
-	const attemptRecord = await db.query.authAttempts.findFirst({
-		where: (a, { eq }) => eq(a.ip, ip),
-	});
-
-	if (attemptRecord?.lockoutUntil && attemptRecord.lockoutUntil > new Date()) {
-		return {
-			success: false,
-			errors: { _form: ["Too many failed attempts. Try again in 15 minutes."] },
-		};
-	}
-
-	// 2. Validate Password
-	const hash = process.env.ADMIN_PASSWORD_HASH;
-	const legacyPlaintext = process.env.ADMIN_PASSWORD;
-
-	let isValid = false;
-	if (hash) {
-		isValid = bcrypt.compareSync(password, hash);
-	} else if (legacyPlaintext) {
-		isValid = password === legacyPlaintext;
-	}
-
-	if (!isValid) {
-		// Log failed attempt
-		const newAttempts = (attemptRecord?.attempts ?? 0) + 1;
-		let lockout: Date | null = null;
-
-		if (newAttempts >= 5) {
-			lockout = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
-		}
-
-		await db
-			.insert(authAttempts)
-			.values({
-				ip,
-				attempts: newAttempts,
-				lockoutUntil: lockout,
-				lastAttemptAt: new Date(),
-			})
-			.onConflictDoUpdate({
-				target: authAttempts.ip,
-				set: {
-					attempts: newAttempts,
-					lockoutUntil: lockout,
-					lastAttemptAt: new Date(),
-				},
-			});
-
-		return { success: false, errors: { password: ["Incorrect password"] } };
-	}
-
-	// 3. Success — Reset attempts & Create Session
-	if (attemptRecord) {
-		await db
-			.update(authAttempts)
-			.set({ attempts: 0, lockoutUntil: null })
-			.where(eq(authAttempts.ip, ip));
-	}
-
-	await createSession();
-	redirect("/admin/posts");
-}
-
 export async function logoutAction() {
-	await deleteSession();
 	redirect("/");
 }
-
-// ─── Post Management ─────────────────────────────────────────────────────────
-
-// Removed CreatePostSchema (imported from validations)
 
 export type CreatePostState = {
 	success: boolean;
@@ -195,7 +94,6 @@ export async function savePost(
 	_prevState: CreatePostState,
 	formData: FormData,
 ): Promise<CreatePostState> {
-	// Require Auth
 	const session = await verifySession();
 	if (!session) return { success: false, errors: { _form: ["Unauthorized"] } };
 
@@ -260,7 +158,6 @@ export async function autoSavePost(
 	_prevState: CreatePostState,
 	formData: FormData,
 ): Promise<CreatePostState> {
-	// Require Auth
 	const session = await verifySession();
 	if (!session) return { success: false, errors: { _form: ["Unauthorized"] } };
 
@@ -364,8 +261,6 @@ export async function togglePostPublish(id: string, currentPublished: boolean) {
 	revalidatePath("/blog");
 	revalidatePath("/admin/posts");
 }
-
-// ─── Comment Management ─────────────────────────────────────────────────────
 
 export async function bulkApproveComments(ids: string[]) {
 	const session = await verifySession();
