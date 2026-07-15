@@ -145,7 +145,6 @@ export default function RichTextEditor({
 			StarterKit,
 			Link.configure({
 				openOnClick: false,
-				// biome-ignore lint/style/useNamingConvention: Tiptap requires HTMLAttributes to be capitalized
 				HTMLAttributes: {
 					class:
 						"text-light-blue hover:text-white transition-colors cursor-pointer",
