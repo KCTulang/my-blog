@@ -14,10 +14,12 @@ export const metadata: Metadata = {
 // ── Data fetcher (runs dynamically, inside Suspense) ──────────────────────────
 
 async function fetchAllComments() {
-	return db.query.comments.findMany({
-		with: { post: true },
-		orderBy: (c, { desc }) => [desc(c.createdAt)],
-	});
+	return db.query.comments
+		.findMany({
+			with: { post: true },
+			orderBy: (c, { desc }) => [desc(c.createdAt)],
+		})
+		.catch(() => []);
 }
 
 // ── Dynamic island ────────────────────────────────────────────────────────────

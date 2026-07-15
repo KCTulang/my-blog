@@ -5,11 +5,13 @@ import { db } from "@/lib/db";
 
 // Async Server Component
 export default async function PostsCarouselSection() {
-	const rawPosts = await db.query.posts.findMany({
-		where: (posts, { eq }) => eq(posts.published, true),
-		orderBy: (posts, { desc }) => [desc(posts.createdAt)],
-		with: { comments: true },
-	});
+	const rawPosts = await db.query.posts
+		.findMany({
+			where: (posts, { eq }) => eq(posts.published, true),
+			orderBy: (posts, { desc }) => [desc(posts.createdAt)],
+			with: { comments: true },
+		})
+		.catch(() => []);
 
 	const posts: BlogPost[] = rawPosts.map((p) => {
 		const plainText = p.body.replace(/<[^>]*>?/gm, "");

@@ -17,9 +17,11 @@ async function PostListIsland() {
 	const session = await verifySession();
 	if (!session) redirect("/admin");
 
-	const posts = await db.query.posts.findMany({
-		orderBy: (p, { desc }) => [desc(p.createdAt)],
-	});
+	const posts = await db.query.posts
+		.findMany({
+			orderBy: (p, { desc }) => [desc(p.createdAt)],
+		})
+		.catch(() => []);
 	return <AdminPostList initialPosts={posts} />;
 }
 
