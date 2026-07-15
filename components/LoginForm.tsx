@@ -1,27 +1,44 @@
 "use client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
-import { loginAction } from "@/lib/actions";
-
-function SubmitButton() {
-	const { pending } = useFormStatus();
-	return (
-		<button
-			type="submit"
-			disabled={pending}
-			className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-		>
-			{pending ? "Authenticating…" : "Enter"}
-		</button>
-	);
-}
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginForm() {
-	const [state, formAction] = useActionState(loginAction, { success: false });
+	const [pending, setPending] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
+	const router = useRouter();
+
+	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		setPending(true);
+		setErrorMsg("");
+
+		const formData = new FormData(e.currentTarget);
+		const password = formData.get("password") as string;
+
+		if (!password) {
+			setErrorMsg("Password is required");
+			setPending(false);
+			return;
+		}
+
+		const { error } = await authClient.signIn.email({
+			email: "admin@loonary.com",
+			password,
+		});
+
+		if (error) {
+			setErrorMsg(error.message || "Incorrect password");
+			setPending(false);
+		} else {
+			router.push("/admin/posts");
+			router.refresh();
+		}
+	}
 
 	return (
-		<form action={formAction} className="flex flex-col gap-5">
+		<form onSubmit={handleSubmit} className="flex flex-col gap-5">
 			<div>
 				<label htmlFor="password" className="sr-only">
 					Password
@@ -34,20 +51,21 @@ export default function LoginForm() {
 					placeholder="Password"
 					className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-sm text-white placeholder-zinc-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
 				/>
-				{state.errors?.password && (
-					<p className="mt-2 text-center text-xs text-red-400">
-						{state.errors.password[0]}
-					</p>
-				)}
 			</div>
 
-			{state.errors?._form && (
+			{errorMsg && (
 				<p className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-center text-xs text-red-400">
-					{state.errors._form[0]}
+					{errorMsg}
 				</p>
 			)}
 
-			<SubmitButton />
+			<button
+				type="submit"
+				disabled={pending}
+				className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+			>
+				{pending ? "Authenticating…" : "Enter"}
+			</button>
 		</form>
 	);
 }

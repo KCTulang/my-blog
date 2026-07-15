@@ -4,8 +4,6 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { type AddCommentState, addComment } from "@/lib/actions";
 
-// Submit button
-
 function SubmitButton() {
 	const { pending } = useFormStatus();
 	return (
@@ -21,8 +19,6 @@ function SubmitButton() {
 	);
 }
 
-// Field error
-
 function FieldError({ messages }: { messages?: string[] }) {
 	if (!messages?.length) return null;
 	return (
@@ -31,8 +27,6 @@ function FieldError({ messages }: { messages?: string[] }) {
 		</p>
 	);
 }
-
-// Main comment
 
 const initialState: AddCommentState = { success: false };
 
@@ -56,11 +50,9 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 				</p>
 			) : (
 				<form action={formAction} className="flex flex-col gap-4">
-					{/* Hidden fields */}
 					<input type="hidden" name="postId" value={postId} />
 					<input type="hidden" name="slug" value={slug} />
 
-					{/* Author name */}
 					<div>
 						<label
 							htmlFor="authorName"
@@ -81,7 +73,6 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 						<FieldError messages={state.errors?.authorName} />
 					</div>
 
-					{/* Comment body */}
 					<div>
 						<label
 							htmlFor="body"
@@ -103,7 +94,6 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 						<FieldError messages={state.errors?.body} />
 					</div>
 
-					{/* Form-level error */}
 					{state.errors?._form && (
 						<p className="text-xs text-red-400" role="alert">
 							{state.errors._form[0]}

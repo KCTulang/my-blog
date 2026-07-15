@@ -1,11 +1,31 @@
+import { eq } from "drizzle-orm";
+import { auth } from "../auth";
 import { db } from "./index";
-import { comments, posts } from "./schema";
+import { comments, posts, user } from "./schema";
 
 async function main() {
 	console.log("Seeding database...");
 
 	try {
-		// Use onConflictDoNothing so re-running seed is idempotent
+		const existingAdmin = await db.query.user.findFirst({
+			where: eq(user.email, "admin@loonary.com"),
+		});
+
+		if (!existingAdmin) {
+			console.log("Seeding Admin User...");
+			const password = process.env.ADMIN_PASSWORD || "LoonaryAdmin888";
+			await auth.api.signUpEmail({
+				body: {
+					email: "admin@loonary.com",
+					password: password,
+					name: "Admin",
+				},
+			});
+			console.log("Admin User seeded successfully.");
+		} else {
+			console.log("Admin User already exists. Skipping.");
+		}
+
 		const insertedPosts = await db
 			.insert(posts)
 			.values([
@@ -43,7 +63,7 @@ async function main() {
 						postId: insertedPosts[0].id,
 						authorName: "Admin",
 						body: "Testing the brand new comments section!",
-						approved: true, // pre-approved seed comments are visible immediately
+						approved: true,
 					},
 					{
 						postId: insertedPosts[2].id,

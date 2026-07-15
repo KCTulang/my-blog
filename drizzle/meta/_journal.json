@@ -29,6 +29,13 @@
 			"when": 1783998041947,
 			"tag": "0003_add_deleted_at",
 			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1784090061341,
+			"tag": "0004_little_zemo",
+			"breakpoints": true
 		}
 	]
 }
