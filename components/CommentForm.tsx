@@ -33,16 +33,25 @@ const initialState: AddCommentState = { success: false };
 interface CommentFormProps {
 	postId: string;
 	slug: string;
+	parentId?: string;
+	onCancel?: () => void;
 }
 
-export default function CommentForm({ postId, slug }: CommentFormProps) {
+export default function CommentForm({
+	postId,
+	slug,
+	parentId,
+	onCancel,
+}: CommentFormProps) {
 	const [state, formAction] = useActionState(addComment, initialState);
 
 	return (
-		<section className="mt-10">
-			<h3 className="mb-4 font-serif text-lg font-semibold text-white group-[.light-cards]:text-zinc-900 transition-colors">
-				Leave a comment
-			</h3>
+		<section className={parentId ? "mt-4" : "mt-10"}>
+			{!parentId && (
+				<h3 className="mb-4 font-serif text-lg font-semibold text-white group-[.light-cards]:text-zinc-900 transition-colors">
+					Leave a comment
+				</h3>
+			)}
 
 			{state.success ? (
 				<p className="rounded-xl border border-white/10 group-[.light-cards]:border-black/10 bg-white/5 group-[.light-cards]:bg-black/5 px-4 py-3 text-sm text-green-400 group-[.light-cards]:text-green-600 transition-colors">
@@ -52,6 +61,7 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 				<form action={formAction} className="flex flex-col gap-4">
 					<input type="hidden" name="postId" value={postId} />
 					<input type="hidden" name="slug" value={slug} />
+					{parentId && <input type="hidden" name="parentId" value={parentId} />}
 
 					<div>
 						<label
@@ -100,7 +110,21 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 						</p>
 					)}
 
-					<SubmitButton />
+					<div className="flex gap-2 w-full">
+						<div className="flex-1">
+							<SubmitButton />
+						</div>
+						{onCancel && (
+							<button
+								type="button"
+								onClick={onCancel}
+								className="mt-2 min-h-11 rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200
+									bg-transparent text-white group-[.light-cards]:text-zinc-900 border border-transparent hover:bg-white/10 group-[.light-cards]:hover:bg-black/5"
+							>
+								Cancel
+							</button>
+						)}
+					</div>
 				</form>
 			)}
 		</section>

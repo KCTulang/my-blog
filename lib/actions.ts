@@ -12,6 +12,7 @@ import { CreatePostSchema } from "@/lib/validations/post";
 const AddCommentSchema = z.object({
 	postId: z.string().uuid("Invalid post ID"),
 	slug: z.string().min(1, "Slug is required"),
+	parentId: z.string().uuid("Invalid parent ID").optional(),
 	authorName: z
 		.string()
 		.min(1, "Name is required")
@@ -40,6 +41,7 @@ export async function addComment(
 	const raw = {
 		postId: formData.get("postId"),
 		slug: formData.get("slug"),
+		parentId: formData.get("parentId") || undefined,
 		authorName: formData.get("authorName"),
 		body: formData.get("body"),
 	};
@@ -56,6 +58,7 @@ export async function addComment(
 	try {
 		await db.insert(comments).values({
 			postId: result.data.postId,
+			parentId: result.data.parentId,
 			authorName: result.data.authorName,
 			body: result.data.body,
 			approved: result.data.authorName === "Admin",

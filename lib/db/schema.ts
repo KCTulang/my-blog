@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+	type AnyPgColumn,
 	boolean,
 	integer,
 	pgTable,
@@ -31,6 +32,9 @@ export const comments = pgTable("comments", {
 	postId: uuid("post_id")
 		.references(() => posts.id, { onDelete: "cascade" })
 		.notNull(),
+	parentId: uuid("parent_id").references((): AnyPgColumn => comments.id, {
+		onDelete: "cascade",
+	}),
 	authorName: text("author_name").notNull(),
 	body: text("body").notNull(),
 	approved: boolean("approved").notNull().default(false),
@@ -41,8 +45,14 @@ export const comments = pgTable("comments", {
 export const postsRelations = relations(posts, ({ many }) => ({
 	comments: many(comments),
 }));
-export const commentsRelations = relations(comments, ({ one }) => ({
+export const commentsRelations = relations(comments, ({ one, many }) => ({
 	post: one(posts, { fields: [comments.postId], references: [posts.id] }),
+	parent: one(comments, {
+		fields: [comments.parentId],
+		references: [comments.id],
+		relationName: "parent_child",
+	}),
+	replies: many(comments, { relationName: "parent_child" }),
 }));
 
 export const user = pgTable("user", {
