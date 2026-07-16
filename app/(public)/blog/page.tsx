@@ -1,7 +1,8 @@
 import { and, arrayContains, desc, eq, isNull } from "drizzle-orm";
-import Link from "next/link";
+
 import { Suspense } from "react";
 import BlogPostCard from "@/components/BlogPostCard";
+import TagFilterBar from "@/components/TagFilterBar";
 import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
 
@@ -21,37 +22,6 @@ async function CommentCount({ postId }: { postId: string }) {
 		<span className="text-xs text-zinc-500">
 			{count} {count === 1 ? "comment" : "comments"}
 		</span>
-	);
-}
-
-function TagFilterBar({
-	tags,
-	activeTag,
-}: {
-	tags: string[];
-	activeTag?: string;
-}) {
-	if (tags.length === 0) return null;
-	return (
-		<div className="mb-8 -mx-1 overflow-x-auto scrollbar-hide">
-			<div className="flex min-w-max gap-2 px-1 pb-1">
-				<Link
-					href="/blog"
-					className={`tag-pill ${!activeTag ? "tag-pill-active" : ""}`}
-				>
-					All
-				</Link>
-				{tags.map((tag) => (
-					<Link
-						key={tag}
-						href={`/blog?tag=${encodeURIComponent(tag)}`}
-						className={`tag-pill ${activeTag === tag ? "tag-pill-active" : ""}`}
-					>
-						{tag}
-					</Link>
-				))}
-			</div>
-		</div>
 	);
 }
 
