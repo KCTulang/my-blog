@@ -46,7 +46,7 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 
 			{state.success ? (
 				<p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-green-400">
-					✓ Comment posted! Thanks for sharing.
+					Thanks for sharing! Your comment is waiting for approval.
 				</p>
 			) : (
 				<form action={formAction} className="flex flex-col gap-4">
