@@ -26,6 +26,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
+				id="app-root"
 				className={`${inter.variable} ${lora.variable} antialiased flex min-h-screen flex-col`}
 			>
 				<CustomCursor />

@@ -339,9 +339,9 @@
 
 /* Zero transitions for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
-	*,
 	*::before,
-	*::after {
+	*::after,
+	* {
 		animation-duration: 0.01ms;
 		animation-iteration-count: 1;
 		transition-duration: 0.01ms;
@@ -374,4 +374,11 @@
 .prose li {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
+}
+
+#app-root,
+#app-root *,
+#app-root *::before,
+#app-root *::after {
+	cursor: none;
 }
