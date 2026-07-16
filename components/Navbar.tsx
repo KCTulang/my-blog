@@ -141,6 +141,7 @@ export default function Navbar() {
 							href={path}
 							onClick={closeMenu}
 							className={getLinkClasses(pathname === path)}
+							tabIndex={isMenuOpen ? 0 : -1}
 						>
 							{name}
 						</Link>

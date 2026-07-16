@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -61,6 +62,46 @@ async function CommentList({ postId }: { postId: string }) {
 
 interface PostPageProps {
 	params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({
+	params,
+}: PostPageProps): Promise<Metadata> {
+	const { slug } = await params;
+	const post = await db.query.posts
+		.findFirst({
+			where: (p, { and, eq, isNull }) =>
+				and(eq(p.slug, slug), isNull(p.deletedAt)),
+		})
+		.catch(() => null);
+
+	if (!post) {
+		return {
+			title: "Post Not Found",
+		};
+	}
+
+	const plainTextBody = post.body
+		.replace(/<[^>]+>/g, "")
+		.substring(0, 160)
+		.trim();
+
+	return {
+		title: post.title,
+		description:
+			plainTextBody.length > 0
+				? `${plainTextBody}...`
+				: `Read ${post.title} on Loonary.`,
+		openGraph: {
+			title: post.title,
+			description:
+				plainTextBody.length > 0
+					? `${plainTextBody}...`
+					: `Read ${post.title} on Loonary.`,
+			type: "article",
+			publishedTime: post.createdAt.toISOString(),
+		},
+	};
 }
 
 export default async function PostPage({ params }: PostPageProps) {
