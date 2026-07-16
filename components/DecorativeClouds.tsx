@@ -19,7 +19,7 @@ export default function DecorativeClouds({
 
 	return (
 		<div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-			{/* Cloud A — top-right: larger and positioned mid-right, not pinned to very top */}
+			{/* Cloud A */}
 			<FloatingElement
 				duration={25}
 				delay={0}
@@ -41,7 +41,7 @@ export default function DecorativeClouds({
 				/>
 			</FloatingElement>
 
-			{/* Cloud B — mid-left on mobile (not bottom), bottom-left on desktop */}
+			{/* Cloud B */}
 			<FloatingElement
 				duration={30}
 				delay={2}
@@ -63,7 +63,7 @@ export default function DecorativeClouds({
 				/>
 			</FloatingElement>
 
-			{/* Cloud C — bottom-right, kept above the footer */}
+			{/* Cloud C*/}
 			<FloatingElement
 				duration={20}
 				delay={1}

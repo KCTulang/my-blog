@@ -38,7 +38,7 @@ export default function AdminNewPostPage() {
 
 				<Suspense
 					fallback={
-						<div className="h-[500px] w-full animate-pulse rounded-3xl bg-white/5" />
+						<div className="h-125 w-full animate-pulse rounded-3xl bg-white/5" />
 					}
 				>
 					<NewPostIsland />

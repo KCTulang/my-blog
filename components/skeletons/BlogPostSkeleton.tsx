@@ -15,7 +15,6 @@ export function BlogPostSkeleton() {
 				</div>
 
 				<div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
-					{/* ── LEFT COLUMN: BLOG POST ── */}
 					<article className="flex-1 w-full lg:max-w-4xl card-glass-dim rounded-3xl border border-white/10 p-6 sm:p-10 lg:p-12">
 						{/* Title */}
 						<Skeleton className="mb-3 h-8 w-4/5 sm:h-9 md:h-10" />
@@ -32,8 +31,7 @@ export function BlogPostSkeleton() {
 						</div>
 					</article>
 
-					{/* ── RIGHT COLUMN: SIDEBAR ── */}
-					<div className="w-full lg:w-[320px] xl:w-[380px] shrink-0 flex flex-col gap-10 lg:sticky lg:top-32">
+					<div className="w-full lg:w-[320px] xl:w-95 shrink-0 flex flex-col gap-10 lg:sticky lg:top-32">
 						{/* Comments Card skeleton */}
 						<div className="card-glass-dim rounded-3xl border border-white/10 p-6 sm:p-8 flex flex-col gap-8">
 							{/* Comment list */}

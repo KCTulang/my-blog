@@ -92,7 +92,7 @@ export default function Navbar() {
 					))}
 				</div>
 
-				{/* Mobile hamburger — min 44×44px tap target */}
+				{/* Mobile hamburger */}
 				<button
 					type="button"
 					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -127,7 +127,7 @@ export default function Navbar() {
 				</button>
 			</nav>
 
-			{/* Mobile dropdown — animated slide-down */}
+			{/* Mobile dropdown */}
 			<div
 				id="mobile-menu"
 				className={`md:hidden overflow-hidden transition-all duration-200 ease-out backdrop-blur-sm

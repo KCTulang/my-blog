@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 	robots: { index: false, follow: false },
 };
 
-// ── Dynamic island ────────────────────────────────────────────────────────────
+// Dynamic island
 
 async function PostListIsland() {
 	const session = await verifySession();
@@ -25,7 +25,7 @@ async function PostListIsland() {
 	return <AdminPostList initialPosts={posts} />;
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// Page
 
 export default function AdminPostsPage() {
 	return (

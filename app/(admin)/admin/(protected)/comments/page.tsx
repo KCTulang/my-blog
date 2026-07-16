@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 	robots: { index: false, follow: false },
 };
 
-// ── Data fetcher (runs dynamically, inside Suspense) ──────────────────────────
+// Data fetcher
 
 async function fetchAllComments() {
 	return db.query.comments
@@ -22,7 +22,7 @@ async function fetchAllComments() {
 		.catch(() => []);
 }
 
-// ── Dynamic island ────────────────────────────────────────────────────────────
+// Dynamic island
 
 async function CommentListIsland() {
 	const session = await verifySession();
@@ -32,7 +32,7 @@ async function CommentListIsland() {
 	return <AdminCommentList initialComments={allComments} />;
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// Page
 
 export default function AdminCommentsPage() {
 	return (

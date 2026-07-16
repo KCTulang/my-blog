@@ -19,7 +19,6 @@ async function AuthCheck() {
 export default function AdminLoginPage() {
 	return (
 		<div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden">
-			{/* Ambient background matching homepage */}
 			<div
 				aria-hidden="true"
 				className="ambient-glow-home pointer-events-none absolute inset-0 z-0"

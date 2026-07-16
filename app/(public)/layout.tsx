@@ -3,7 +3,6 @@ import DecorativeClouds from "@/components/DecorativeClouds";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
-// Static navbar shell shown during PPR prerender before Navbar hydrates
 function NavbarShell() {
 	return (
 		<header className="shadow-navbar fixed left-0 right-0 top-0 z-50 w-full">
