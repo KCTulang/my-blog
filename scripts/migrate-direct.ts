@@ -3,8 +3,7 @@ import { config } from "dotenv";
 
 config({ path: ".env.local" });
 
-// biome-ignore lint/style/noNonNullAssertion: guaranteed by environment
-const sql = neon(process.env.DATABASE_URL!);
+const sql = neon(process.env.DATABASE_URL as string);
 
 async function runSql() {
 	console.log("Running direct SQL...");

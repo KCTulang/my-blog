@@ -17,10 +17,9 @@ export default function AdminNavBar() {
 	const menuRef = useRef<HTMLDivElement>(null);
 
 	// Close on route change
-	// biome-ignore lint/correctness/useExhaustiveDependencies: close on route change
 	useEffect(() => {
 		setIsOpen(false);
-	}, [pathname]);
+	}, []);
 
 	// Close on outside click
 	useEffect(() => {

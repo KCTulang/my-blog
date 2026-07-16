@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export default function HiddenAdminLink({
 	children,
@@ -23,10 +23,17 @@ export default function HiddenAdminLink({
 		}
 	}, [router]);
 
+	const linkRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const el = linkRef.current;
+		if (!el) return;
+		el.addEventListener("click", handleClick);
+		return () => el.removeEventListener("click", handleClick);
+	}, [handleClick]);
+
 	return (
-		// biome-ignore lint/a11y/useKeyWithClickEvents: Easter egg link
-		// biome-ignore lint/a11y/noStaticElementInteractions: Easter egg link
-		<div onClick={handleClick} className="cursor-default select-none">
+		<div ref={linkRef} className="cursor-default select-none">
 			{children}
 		</div>
 	);
