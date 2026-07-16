@@ -46,7 +46,7 @@ export default function Navbar() {
 
 	const getLinkClasses = (isActive: boolean) => {
 		const base =
-			"block text-center rounded-full px-5 py-3 text-[13px] font-serif font-bold tracking-tight transition-all duration-200";
+			"block text-center rounded-full px-5 py-3 text-[13px] font-serif font-bold tracking-tight transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50";
 		const active =
 			"bg-white/[0.06] text-gold border border-white/[0.08] shadow-[0_4px_20px_0_rgba(0,0,0,0.50)]";
 		const inactive = "text-zinc-400 hover:text-off-white";
@@ -66,7 +66,7 @@ export default function Navbar() {
 						closeMenu();
 						window.scrollTo({ top: 0, behavior: "smooth" });
 					}}
-					className="flex items-center hover:opacity-80 transition-opacity"
+					className="flex items-center hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-md"
 					aria-label="Loonary home"
 				>
 					<Image
@@ -98,7 +98,7 @@ export default function Navbar() {
 					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
 					aria-expanded={isMenuOpen}
 					aria-controls="mobile-menu"
-					className="flex md:hidden min-h-11 min-w-11 items-center justify-center text-zinc-400 hover:text-white transition-colors"
+					className="flex md:hidden min-h-11 min-w-11 items-center justify-center text-zinc-400 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-md"
 					onClick={() => setIsMenuOpen((prev) => !prev)}
 				>
 					<svg

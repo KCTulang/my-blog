@@ -1,6 +1,7 @@
 "use client";
 
 import parse from "html-react-parser";
+import DOMPurify from "isomorphic-dompurify";
 import { useState } from "react";
 
 interface PostCardsLayoutProps {
@@ -69,7 +70,7 @@ export default function PostCardsLayout({
 							: "text-zinc-300 prose-p:text-zinc-300 prose-headings:text-white prose-a:text-light-blue hover:prose-a:text-white prose-strong:text-white prose-li:text-zinc-300"
 					}`}
 				>
-					{parse(post.body)}
+					{parse(DOMPurify.sanitize(post.body))}
 				</div>
 			</article>
 

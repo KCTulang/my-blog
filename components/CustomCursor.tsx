@@ -17,12 +17,13 @@ interface Particle {
 export default function CustomCursor() {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [isVisible, setIsVisible] = useState(false);
+	const [isTouchDevice, setIsTouchDevice] = useState(false);
 	const mouseX = useMotionValue(-100);
 	const mouseY = useMotionValue(-100);
 
 	useEffect(() => {
-		// Only show on devices with a mouse
 		if (window.matchMedia("(pointer: coarse)").matches) {
+			setIsTouchDevice(true);
 			return;
 		}
 
@@ -83,20 +84,18 @@ export default function CustomCursor() {
 		const updateAndDrawParticles = () => {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			// Draw particles
 			for (let i = particles.length - 1; i >= 0; i--) {
 				const p = particles[i];
 				p.x += p.vx;
 				p.y += p.vy;
 				p.rotation += p.rotSpeed;
-				p.life -= 0.02; // fade out speed
+				p.life -= 0.02;
 
 				if (p.life <= 0) {
 					particles.splice(i, 1);
 					continue;
 				}
 
-				// Gold color: #fbbf24 = 251, 191, 36
 				const color = `rgba(251, 191, 36, ${p.life})`;
 				drawStar(
 					p.x,
@@ -124,22 +123,20 @@ export default function CustomCursor() {
 
 			if (!isVisible) setIsVisible(true);
 
-			// Distance check to spawn particles
 			const dx = x - lastPos.x;
 			const dy = y - lastPos.y;
 			const dist = Math.sqrt(dx * dx + dy * dy);
 
 			if (dist > 4) {
-				// Spawn 1 or 2 particles randomly when moving
 				const spawnCount = Math.random() > 0.5 ? 1 : 2;
 				for (let i = 0; i < spawnCount; i++) {
 					particles.push({
 						x: x,
-						y: y + 10, // slight offset from center
+						y: y + 10,
 						vx: (Math.random() - 0.5) * 1.5,
-						vy: Math.random() * 1 + 0.5, // fall downwards slightly
+						vy: Math.random() * 1 + 0.5,
 						life: 1,
-						size: Math.random() * 6 + 4, // radius
+						size: Math.random() * 6 + 4,
 						rotation: Math.random() * Math.PI,
 						rotSpeed: (Math.random() - 0.5) * 0.1,
 					});
@@ -164,16 +161,18 @@ export default function CustomCursor() {
 		};
 	}, [isVisible, mouseX, mouseY]);
 
+	if (isTouchDevice) return null;
+
 	return (
 		<>
-			{/* Fairy dust canvas */}
 			<canvas
 				ref={canvasRef}
 				className="fixed inset-0 pointer-events-none z-90"
 				style={{ opacity: isVisible ? 1 : 0, transition: "opacity 0.3s" }}
+				aria-hidden="true"
+				tabIndex={-1}
 			/>
 
-			{/* Main Cursor: Gold Diamond/Star */}
 			<motion.div
 				className="fixed w-8 h-8 pointer-events-none z-100 flex items-center justify-center text-yellow-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]"
 				style={{
@@ -183,8 +182,8 @@ export default function CustomCursor() {
 					top: -16,
 					opacity: isVisible ? 1 : 0,
 				}}
+				aria-hidden="true"
 			>
-				{/* Shadow circle / Aura */}
 				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-yellow-400/10 backdrop-blur-[1px] shadow-[0_0_15px_rgba(251,191,36,0.2)]" />
 
 				<svg
