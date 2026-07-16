@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import parse from "html-react-parser";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -218,43 +217,22 @@ export default function PostEditor({ post }: { post?: Post }) {
 					<FieldError message={errors.slug?.message} />
 				</div>
 
-				{/* Body & Live Preview Split */}
-				<div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-					<div className="flex flex-col">
-						<label
-							htmlFor="admin-body"
-							className="mb-2 block text-xs font-medium text-zinc-400"
-						>
-							Body Editor
-						</label>
-						<div id="admin-body" className="flex-1">
-							<Controller
-								name="body"
-								control={control}
-								render={({ field }) => (
-									<RichTextEditor
-										value={field.value}
-										onChange={field.onChange}
-									/>
-								)}
-							/>
-						</div>
-					</div>
-					<div className="hidden lg:flex lg:flex-col">
-						<span className="mb-2 block text-xs font-medium text-zinc-400">
-							Live Preview
-						</span>
-						<div className="flex-1 rounded-xl border border-white/10 bg-[#0a0f1c] p-6 overflow-y-auto">
-							<div className="prose max-w-none text-zinc-300 prose-p:leading-relaxed prose-p:text-zinc-300 prose-headings:font-serif prose-headings:text-white prose-a:text-light-blue hover:prose-a:text-white prose-strong:text-white prose-ul:list-disc prose-ol:list-decimal prose-ul:pl-6 prose-ol:pl-6 prose-li:my-1 prose-li:text-zinc-300">
-								{watchedValues.body ? (
-									parse(watchedValues.body)
-								) : (
-									<p className="text-zinc-600 italic">
-										Start typing to see preview...
-									</p>
-								)}
-							</div>
-						</div>
+				{/* Body */}
+				<div>
+					<label
+						htmlFor="admin-body"
+						className="mb-2 block text-xs font-medium text-zinc-400"
+					>
+						Body
+					</label>
+					<div id="admin-body">
+						<Controller
+							name="body"
+							control={control}
+							render={({ field }) => (
+								<RichTextEditor value={field.value} onChange={field.onChange} />
+							)}
+						/>
 					</div>
 				</div>
 
