@@ -43,7 +43,7 @@ export default function CustomCursor() {
 		<>
 			{/* The Dot */}
 			<motion.div
-				className="fixed w-1 h-1 bg-white rounded-full pointer-events-none z-[100]"
+				className="fixed w-1 h-1 bg-white rounded-full pointer-events-none z-100"
 				style={{
 					x: mouseX,
 					y: mouseY,
@@ -54,7 +54,7 @@ export default function CustomCursor() {
 			/>
 			{/* The Aura */}
 			<motion.div
-				className="fixed w-8 h-8 rounded-full pointer-events-none z-[99] backdrop-blur-[1px]"
+				className="fixed w-8 h-8 rounded-full pointer-events-none z-99 backdrop-blur-[1px]"
 				style={{
 					x: auraX,
 					y: auraY,
