@@ -31,6 +31,26 @@ export default function AboutPage() {
 					<p className="font-serif text-light-blue">a moonlit digital diary</p>
 				</div>
 
+				{/* Mobile Loona Image */}
+				<div className="flex lg:hidden w-full justify-center mb-12">
+					<FadeInUp className="w-full max-w-sm">
+						<FloatingElement
+							yOffset={10}
+							duration={5}
+							className="relative h-64 sm:h-80 w-full"
+						>
+							<Image
+								src="/Loona-hero-v2.png"
+								alt="Loona the dachshund in all her glory"
+								fill
+								sizes="(max-width: 1024px) 100vw, 50vw"
+								className="object-contain object-top"
+								priority
+							/>
+						</FloatingElement>
+					</FadeInUp>
+				</div>
+
 				<div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-stretch">
 					<div className="flex flex-1 flex-col w-full lg:max-w-2xl">
 						<div className="flex flex-col gap-6">
@@ -84,9 +104,9 @@ export default function AboutPage() {
 					</div>
 
 					<div className="flex w-full lg:w-1/2 flex-col gap-6 lg:justify-between">
-						{/* Loona Image */}
-						<div className="flex w-full justify-center">
-							<FadeInUp className="w-full max-w-sm lg:max-w-md">
+						{/* Loona Image (Desktop) */}
+						<div className="hidden lg:flex w-full justify-center">
+							<FadeInUp className="w-full max-w-md">
 								<FloatingElement
 									yOffset={15}
 									duration={5}
