@@ -63,7 +63,7 @@ interface PostPageProps {
 	params: Promise<{ slug: string }>;
 }
 
-export const revalidate = 3600; // Cache for 1 hour, busted by revalidatePath
+
 
 export default async function PostPage({ params }: PostPageProps) {
 	const { slug } = await params;

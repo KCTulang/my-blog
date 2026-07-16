@@ -59,7 +59,7 @@ interface BlogPageProps {
 	searchParams: Promise<{ tag?: string }>;
 }
 
-export const revalidate = 3600; // Cache for 1 hour, busted by revalidatePath
+
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
 	const { tag } = await searchParams;
