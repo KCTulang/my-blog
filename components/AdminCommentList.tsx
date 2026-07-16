@@ -172,7 +172,9 @@ function CommentRow({
 									window.location.reload();
 								} else {
 									toast.error(
-										res.errors?._form?.[0] || "Failed to post reply.",
+										res.errors?.body?.[0] ||
+											res.errors?._form?.[0] ||
+											"Failed to post reply.",
 									);
 								}
 							}}
