@@ -4,10 +4,11 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import CommentForm from "@/components/CommentForm";
 import PostCardsLayout from "@/components/PostCardsLayout";
+import UserCommentList from "@/components/UserCommentList";
 import { db } from "@/lib/db";
 import { verifySession } from "@/lib/session";
 
-async function CommentList({ postId }: { postId: string }) {
+async function CommentList({ postId, slug }: { postId: string; slug: string }) {
 	const post = await db.query.posts
 		.findFirst({
 			where: (p, { eq }) => eq(p.id, postId),
@@ -23,41 +24,7 @@ async function CommentList({ postId }: { postId: string }) {
 
 	const comments = post?.comments ?? [];
 
-	if (comments.length === 0) {
-		return (
-			<p className="text-sm text-zinc-500 italic">
-				No comments yet. Be the first to share your thoughts!
-			</p>
-		);
-	}
-
-	return (
-		<ul className="flex flex-col gap-4">
-			{comments.map((c) => (
-				<li
-					key={c.id}
-					className="card-glass-faint group-[.light-cards]:bg-white group-[.light-cards]:shadow-sm rounded-xl border border-white/10 group-[.light-cards]:border-black/10 px-4 py-4 sm:px-5 transition-colors"
-				>
-					<p className="mb-1 text-sm font-semibold text-white group-[.light-cards]:text-zinc-900 transition-colors">
-						{c.authorName}
-					</p>
-					<p className="wrap-break-word text-sm font-light leading-relaxed text-zinc-400 group-[.light-cards]:text-zinc-600 transition-colors">
-						{c.body}
-					</p>
-					<time
-						dateTime={c.createdAt.toISOString()}
-						className="mt-2 block text-xs text-zinc-600 group-[.light-cards]:text-zinc-400 transition-colors"
-					>
-						{c.createdAt.toLocaleDateString("en-US", {
-							year: "numeric",
-							month: "short",
-							day: "numeric",
-						})}
-					</time>
-				</li>
-			))}
-		</ul>
-	);
+	return <UserCommentList comments={comments} postId={postId} slug={slug} />;
 }
 
 interface PostPageProps {
@@ -157,7 +124,7 @@ export default async function PostPage({ params }: PostPageProps) {
 								<div className="h-20 w-full animate-pulse rounded bg-white/5" />
 							}
 						>
-							<CommentList postId={post.id} />
+							<CommentList postId={post.id} slug={post.slug} />
 						</Suspense>
 					}
 					commentFormNode={<CommentForm postId={post.id} slug={post.slug} />}

@@ -24,6 +24,7 @@ import {
 
 type CommentWithPost = {
 	id: string;
+	parentId: string | null;
 	authorName: string;
 	body: string;
 	approved: boolean;
@@ -34,6 +35,7 @@ type CommentWithPost = {
 
 function CommentRow({
 	comment,
+	level = 0,
 	isSelected,
 	onToggleSelect,
 	onRestore,
@@ -44,6 +46,7 @@ function CommentRow({
 	onSetReplyingTo,
 }: {
 	comment: CommentWithPost;
+	level?: number;
 	isSelected: boolean;
 	onToggleSelect: (id: string) => void;
 	onRestore: (id: string) => void;
@@ -57,7 +60,8 @@ function CommentRow({
 		<li
 			className={`card-glass flex flex-col gap-3 rounded-2xl border ${
 				isSelected ? "border-white/30" : "border-white/10"
-			} px-5 py-5 transition-colors`}
+			} px-5 py-5 transition-all`}
+			style={{ marginLeft: `${Math.min(level, 5) * 2}rem` }}
 		>
 			<div className="flex items-start gap-3">
 				<input
@@ -181,6 +185,7 @@ function CommentRow({
 						>
 							<input type="hidden" name="postId" value={comment.post.id} />
 							<input type="hidden" name="slug" value={comment.post.slug} />
+							<input type="hidden" name="parentId" value={comment.id} />
 							<input type="hidden" name="authorName" value="Admin" />
 							<textarea
 								name="body"
@@ -254,6 +259,41 @@ export default function AdminCommentList({
 	const filteredComments = comments.filter(
 		(c) => matchesStatusFilter(c) && matchesPostFilter(c),
 	);
+
+	type CommentTreeNode = CommentWithPost & { children: CommentTreeNode[] };
+
+	const buildTreeAndFlatten = (list: CommentWithPost[]) => {
+		const map = new Map<string, CommentTreeNode>();
+		list.forEach((c) => {
+			map.set(c.id, { ...c, children: [] });
+		});
+		const roots: CommentTreeNode[] = [];
+		list.forEach((c) => {
+			if (c.parentId && map.has(c.parentId)) {
+				const parent = map.get(c.parentId);
+				const child = map.get(c.id);
+				if (parent && child) {
+					parent.children.push(child);
+				}
+			} else {
+				const child = map.get(c.id);
+				if (child) {
+					roots.push(child);
+				}
+			}
+		});
+		const flatWithLevel: (CommentWithPost & { level: number })[] = [];
+		const traverse = (nodes: CommentTreeNode[], level: number) => {
+			nodes.forEach((node) => {
+				flatWithLevel.push({ ...node, level });
+				traverse(node.children, level + 1);
+			});
+		};
+		traverse(roots, 0);
+		return flatWithLevel;
+	};
+
+	const commentsToRender = buildTreeAndFlatten(filteredComments);
 
 	const toggleSelection = (id: string) => {
 		const newSet = new Set(selectedIds);
@@ -658,10 +698,11 @@ export default function AdminCommentList({
 						</div>
 
 						<ul className="flex flex-col gap-4">
-							{filteredComments.map((comment) => (
+							{commentsToRender.map((comment) => (
 								<CommentRow
 									key={comment.id}
 									comment={comment}
+									level={comment.level}
 									isSelected={selectedIds.has(comment.id)}
 									onToggleSelect={toggleSelection}
 									onRestore={executeRestore}
