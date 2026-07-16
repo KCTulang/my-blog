@@ -43,7 +43,8 @@ export default function Home() {
 					>
 						<Image
 							src="/Stars.svg"
-							alt="Stars"
+							alt=""
+							aria-hidden="true"
 							width={147}
 							height={163}
 							className="h-auto w-full"
@@ -53,7 +54,8 @@ export default function Home() {
 					<FloatingElement duration={4} delay={0.5} yOffset={25}>
 						<Image
 							src="/Moon.svg"
-							alt="Moon"
+							alt=""
+							aria-hidden="true"
 							width={864}
 							height={832}
 							priority
@@ -118,7 +120,7 @@ export default function Home() {
 									sm:h-44 sm:w-36
 									lg:h-64 lg:w-52
 									cursor-pointer transition-transform duration-300 ease-out
-									hover:scale-105 hover:-translate-y-1"
+									hover:scale-105 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-xl"
 							>
 								{/* Tooltip */}
 								<span
@@ -134,7 +136,8 @@ export default function Home() {
 
 								<Image
 									src="/Loona-hero-v2.png"
-									alt="Loona the dachshund — click to learn more"
+									alt=""
+									aria-hidden="true"
 									fill
 									sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 208px"
 									className="object-contain object-bottom"
