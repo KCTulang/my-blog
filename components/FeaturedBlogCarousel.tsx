@@ -103,7 +103,7 @@ export default function FeaturedBlogCarousel({
 							aria-label={`Go to slide ${i + 1}`}
 							aria-selected={i === current}
 							onClick={() => scrollTo(i)}
-							className={`h-1.5 rounded-full transition-all duration-300 ${
+							className={`relative before:absolute before:-inset-3 h-1.5 rounded-full transition-all duration-300 ${
 								i === current
 									? "w-5 bg-white/70"
 									: "w-1.5 bg-white/20 hover:bg-white/40"
