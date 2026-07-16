@@ -10,18 +10,20 @@ async function main() {
 
 	const sql = neon(process.env.DATABASE_URL);
 
-	console.log("⏳ Dropping all tables in the public and drizzle schemas...");
+	console.log(
+		" Starting to drop all tables in the public and drizzle schemas...",
+	);
 	await sql`DROP SCHEMA IF EXISTS public CASCADE;`;
 	await sql`DROP SCHEMA IF EXISTS drizzle CASCADE;`;
 
-	console.log("⏳ Recreating public schema...");
+	console.log(" Recreating the public schema...");
 	await sql`CREATE SCHEMA public;`;
 
-	console.log("✅ Database successfully reset!");
+	console.log(" Database reset completed successfully.");
 }
 
 main().catch((err) => {
-	console.error("❌ Failed to reset database:");
+	console.error("Error resetting database:");
 	console.error(err);
 	process.exit(1);
 });
