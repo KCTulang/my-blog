@@ -8,6 +8,8 @@ import HiddenAdminLink from "@/components/HiddenAdminLink";
 import PeekabooEntrance from "@/components/PeekabooEntrance";
 import PostsCarouselSection from "@/components/PostsCarouselSection";
 
+export const revalidate = 3600; // Cache for 1 hour, busted by revalidatePath
+
 export default function Home() {
 	return (
 		<div className="relative flex flex-1 flex-col overflow-hidden">

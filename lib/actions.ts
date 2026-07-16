@@ -18,7 +18,7 @@ const AddCommentSchema = z.object({
 		.max(80, "Name must be 80 characters or fewer"),
 	body: z
 		.string()
-		.min(10, "Comment must be at least 10 characters")
+		.min(2, "Comment must be at least 2 characters")
 		.max(2000, "Comment must be 2000 characters or fewer"),
 });
 
