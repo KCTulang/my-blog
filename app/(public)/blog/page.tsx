@@ -59,8 +59,6 @@ interface BlogPageProps {
 	searchParams: Promise<{ tag?: string }>;
 }
 
-
-
 export default async function BlogPage({ searchParams }: BlogPageProps) {
 	const { tag } = await searchParams;
 
