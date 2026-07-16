@@ -11,7 +11,7 @@ function SubmitButton() {
 			type="submit"
 			disabled={pending}
 			className="mt-2 min-h-11 w-full rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200
-				bg-white/10 text-white border border-white/15 hover:bg-white/20
+				bg-white/10 group-[.light-cards]:bg-black/5 text-white group-[.light-cards]:text-zinc-900 border border-white/15 group-[.light-cards]:border-black/10 hover:bg-white/20 group-[.light-cards]:hover:bg-black/10
 				disabled:opacity-50 disabled:cursor-not-allowed"
 		>
 			{pending ? "Posting…" : "Post comment"}
@@ -40,12 +40,12 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 
 	return (
 		<section className="mt-10">
-			<h3 className="mb-4 font-serif text-lg font-semibold text-white">
+			<h3 className="mb-4 font-serif text-lg font-semibold text-white group-[.light-cards]:text-zinc-900 transition-colors">
 				Leave a comment
 			</h3>
 
 			{state.success ? (
-				<p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-green-400">
+				<p className="rounded-xl border border-white/10 group-[.light-cards]:border-black/10 bg-white/5 group-[.light-cards]:bg-black/5 px-4 py-3 text-sm text-green-400 group-[.light-cards]:text-green-600 transition-colors">
 					Thanks for sharing! Your comment is waiting for approval.
 				</p>
 			) : (
@@ -56,7 +56,7 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 					<div>
 						<label
 							htmlFor="authorName"
-							className="mb-1 block text-xs font-medium text-zinc-400"
+							className="mb-1 block text-xs font-medium text-zinc-400 group-[.light-cards]:text-zinc-600 transition-colors"
 						>
 							Your name
 						</label>
@@ -67,8 +67,8 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 							required
 							maxLength={80}
 							placeholder="Luna Stargazer"
-							className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-zinc-500
-								focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
+							className="w-full rounded-xl border border-white/10 group-[.light-cards]:border-black/10 bg-white/5 group-[.light-cards]:bg-black/5 px-4 py-2 text-sm text-white group-[.light-cards]:text-zinc-900 placeholder-zinc-500 group-[.light-cards]:placeholder-zinc-400
+								focus:outline-none focus:ring-2 focus:ring-white/20 group-[.light-cards]:focus:ring-black/10 transition-all duration-200"
 						/>
 						<FieldError messages={state.errors?.authorName} />
 					</div>
@@ -76,7 +76,7 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 					<div>
 						<label
 							htmlFor="body"
-							className="mb-1 block text-xs font-medium text-zinc-400"
+							className="mb-1 block text-xs font-medium text-zinc-400 group-[.light-cards]:text-zinc-600 transition-colors"
 						>
 							Comment
 						</label>
@@ -88,8 +88,8 @@ export default function CommentForm({ postId, slug }: CommentFormProps) {
 							minLength={10}
 							maxLength={2000}
 							placeholder="Share your thoughts…"
-							className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-zinc-500
-								focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
+							className="w-full resize-none rounded-xl border border-white/10 group-[.light-cards]:border-black/10 bg-white/5 group-[.light-cards]:bg-black/5 px-4 py-2 text-sm text-white group-[.light-cards]:text-zinc-900 placeholder-zinc-500 group-[.light-cards]:placeholder-zinc-400
+								focus:outline-none focus:ring-2 focus:ring-white/20 group-[.light-cards]:focus:ring-black/10 transition-all duration-200"
 						/>
 						<FieldError messages={state.errors?.body} />
 					</div>
