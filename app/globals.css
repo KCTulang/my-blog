@@ -237,7 +237,16 @@
 		pointer-events: none;
 	}
 
-	/* ── Animations ───────────────────────────────────────────────────────── */
+	/* Scrollbar hide */
+	.scrollbar-hide {
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
+	}
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none; /* Chrome, Safari and Opera */
+	}
+
+	/* Animations  */
 
 	@media (prefers-reduced-motion: no-preference) {
 		@keyframes float-y {

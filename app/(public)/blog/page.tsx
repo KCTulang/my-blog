@@ -33,7 +33,7 @@ function TagFilterBar({
 }) {
 	if (tags.length === 0) return null;
 	return (
-		<div className="mb-8 -mx-1 overflow-x-auto">
+		<div className="mb-8 -mx-1 overflow-x-auto scrollbar-hide">
 			<div className="flex min-w-max gap-2 px-1 pb-1">
 				<Link
 					href="/blog"
