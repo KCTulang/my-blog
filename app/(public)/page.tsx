@@ -11,13 +11,11 @@ import PostsCarouselSection from "@/components/PostsCarouselSection";
 export default function Home() {
 	return (
 		<div className="relative flex flex-1 flex-col overflow-hidden">
-			{/* Ambient glow — visible on all sizes */}
 			<div
 				aria-hidden="true"
 				className="ambient-glow-home pointer-events-none absolute inset-0 z-0 hidden lg:block"
 			/>
 
-			{/* HERO */}
 			<main
 				id="hero"
 				className="relative z-10 mx-auto flex w-full max-w-360 flex-1 flex-col items-center
@@ -25,7 +23,6 @@ export default function Home() {
 					sm:pt-20 sm:pb-8 sm:px-6
 					lg:flex-row lg:items-center lg:px-8 lg:py-0 lg:pt-0"
 			>
-				{/* Stars + Moon */}
 				<section
 					aria-label="Moon"
 					className="relative flex flex-1 w-full items-center justify-center
@@ -33,7 +30,6 @@ export default function Home() {
 						sm:py-4
 						lg:flex-none lg:w-[48%] lg:py-0"
 				>
-					{/* Stars  */}
 					<FloatingElement
 						duration={4}
 						delay={1}
@@ -66,7 +62,6 @@ export default function Home() {
 					</FloatingElement>
 				</section>
 
-				{/* Logo + Subtitle + Carousel + Dog */}
 				<section
 					aria-label="Hero content"
 					className="flex w-full flex-col items-center
@@ -74,7 +69,6 @@ export default function Home() {
 						sm:-mt-20 sm:pb-16
 						lg:w-[52%] lg:items-start lg:pb-0 lg:pr-8 lg:mt-0"
 				>
-					{/* Loonary hero logo */}
 					<HiddenAdminLink>
 						<div
 							className="relative mb-0
@@ -94,7 +88,6 @@ export default function Home() {
 						</div>
 					</HiddenAdminLink>
 
-					{/* Subtitle */}
 					<p
 						className="mt-1 mb-6 font-serif tracking-wide text-off-white text-center
 							text-[14px]
@@ -104,19 +97,16 @@ export default function Home() {
 						a moonlit digital diary
 					</p>
 
-					{/* Carousel + Loona Dog */}
 					<div
 						className="relative
 							w-full max-w-75
 							sm:max-w-85
 							lg:max-w-102"
 					>
-						{/* Featured blog post carousel */}
 						<Suspense fallback={<PlaceholderCarousel />}>
 							<PostsCarouselSection />
 						</Suspense>
 
-						{/* Loona mascot — click to visit About page */}
 						<PeekabooEntrance
 							delay={0.6}
 							className="absolute z-20 -right-20 bottom-0 sm:-right-22 sm:-bottom-2 lg:-right-36 lg:-bottom-5"
@@ -155,7 +145,6 @@ export default function Home() {
 				</section>
 			</main>
 
-			{/* About Section */}
 			<section className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 py-32 sm:px-6 lg:py-48 text-center">
 				<FadeInUp>
 					<h2 className="mb-12 font-serif text-3xl font-semibold text-white sm:text-4xl">
@@ -202,7 +191,6 @@ export default function Home() {
 				</div>
 			</section>
 
-			{/* Explore Section */}
 			<section className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center px-4 pb-32 pt-16 sm:px-6 lg:pb-48 text-center">
 				<FadeInUp delay={0.2}>
 					<h2 className="mb-8 font-serif text-2xl font-semibold text-white sm:text-3xl">

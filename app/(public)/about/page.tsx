@@ -32,10 +32,8 @@ export default function AboutPage() {
 				</div>
 
 				<div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-stretch">
-					{/* ── LEFT COLUMN: CONTENT ── */}
 					<div className="flex flex-1 flex-col w-full lg:max-w-2xl">
 						<div className="flex flex-col gap-6">
-							{/* ── ABOUT THE BLOG ── */}
 							<FadeInUp delay={0.1}>
 								<div className="card-glass-dim rounded-3xl border border-white/10 p-8 sm:p-10 transition-all duration-300 hover:border-white/20 hover:shadow-xl">
 									<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
@@ -55,7 +53,6 @@ export default function AboutPage() {
 								</div>
 							</FadeInUp>
 
-							{/* ── ABOUT THE AUTHOR ── */}
 							<FadeInUp delay={0.2} className="h-full">
 								<div className="card-glass-dim h-full flex flex-col rounded-3xl border border-white/10 p-8 sm:p-10 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl">
 									<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
@@ -70,7 +67,6 @@ export default function AboutPage() {
 								</div>
 							</FadeInUp>
 
-							{/* ── ABOUT LOONA ── */}
 							<FadeInUp delay={0.3} className="h-full">
 								<div className="card-glass-dim h-full flex flex-col rounded-3xl border border-white/10 p-8 sm:p-10 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl">
 									<h2 className="mb-4 font-serif text-2xl font-semibold text-white">
@@ -87,7 +83,6 @@ export default function AboutPage() {
 						</div>
 					</div>
 
-					{/* ── RIGHT COLUMN: LOONA IMAGE & EXTRAS ── */}
 					<div className="flex w-full lg:w-1/2 flex-col gap-6 lg:justify-between">
 						{/* Loona Image */}
 						<div className="flex w-full justify-center">
@@ -109,7 +104,6 @@ export default function AboutPage() {
 							</FadeInUp>
 						</div>
 
-						{/* Tech Stack Card */}
 						<FadeInUp delay={0.4}>
 							<div className="card-glass-dim rounded-3xl border border-white/10 p-8 sm:p-10 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl">
 								<h2 className="mb-4 font-serif text-2xl font-semibold text-white">

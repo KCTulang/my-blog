@@ -14,7 +14,6 @@ import {
 export interface BlogPost {
 	id: string;
 	title: string;
-	/** Short excerpt shown on the card */
 	excerpt: string;
 	slug: string;
 }

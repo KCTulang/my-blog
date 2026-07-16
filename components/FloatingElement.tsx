@@ -5,10 +5,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 interface FloatingElementProps {
 	children: React.ReactNode;
 	className?: string;
-	yOffset?: number; // How far up/down it floats
-	xOffset?: number; // How far left/right it drifts
-	duration?: number; // How long one cycle takes
-	delay?: number; // Optional delay before starting
+	yOffset?: number;
+	xOffset?: number;
+	duration?: number;
+	delay?: number;
 }
 
 export default function FloatingElement({

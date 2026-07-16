@@ -50,7 +50,7 @@ function EditFormSkeleton() {
 	);
 }
 
-// ── Page (static shell) ────────────────────────────────────────────────────────
+// Page (static shell) 
 
 export default function AdminEditPostPage({
 	params,
