@@ -1,4 +1,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { ArticleBodySkeleton } from "./ArticleBodySkeleton";
+import { CommentCardSkeleton } from "./CommentCardSkeleton";
+import { CommentFormSkeleton } from "./CommentFormSkeleton";
+import { MorePostsSkeleton } from "./MorePostsSkeleton";
 
 export function BlogPostSkeleton() {
 	return (
@@ -15,21 +19,7 @@ export function BlogPostSkeleton() {
 				</div>
 
 				<div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
-					<article className="flex-1 w-full lg:max-w-4xl card-glass-dim rounded-3xl border border-white/10 p-6 sm:p-10 lg:p-12">
-						{/* Title */}
-						<Skeleton className="mb-3 h-8 w-4/5 sm:h-9 md:h-10" />
-						<Skeleton className="mb-8 h-4 w-32 bg-white/5" />
-
-						{/* Body skeleton */}
-						<div className="flex flex-col gap-3">
-							<Skeleton className="h-4 w-full bg-white/5" />
-							<Skeleton className="h-4 w-11/12 bg-white/5" />
-							<Skeleton className="h-4 w-full bg-white/5" />
-							<Skeleton className="h-4 w-4/5 bg-white/5" />
-							<Skeleton className="h-4 w-full bg-white/5" />
-							<Skeleton className="h-4 w-3/4 bg-white/5" />
-						</div>
-					</article>
+					<ArticleBodySkeleton />
 
 					<div className="w-full lg:w-[320px] xl:w-95 shrink-0 flex flex-col gap-10 lg:sticky lg:top-32">
 						{/* Comments Card skeleton */}
@@ -39,44 +29,19 @@ export function BlogPostSkeleton() {
 								<Skeleton className="mb-6 h-7 w-28" />
 								<div className="flex flex-col gap-4">
 									{["sk-c1", "sk-c2"].map((id) => (
-										<div
-											key={id}
-											className="card-glass-faint rounded-xl border border-white/10 px-4 py-4 sm:px-5"
-										>
-											<Skeleton className="mb-1 h-4 w-28" />
-											<Skeleton className="mb-2 h-4 w-full bg-white/5" />
-											<Skeleton className="mb-2 h-4 w-4/5 bg-white/5" />
-											<Skeleton className="mt-2 h-3 w-16 bg-white/5" />
-										</div>
+										<CommentCardSkeleton key={id} />
 									))}
 								</div>
 							</section>
 
 							{/* Comment form skeleton */}
-							<div>
-								<Skeleton className="mb-4 h-6 w-36" />
-								<Skeleton className="mb-2 h-3 w-16 bg-white/5" />
-								<Skeleton className="mb-4 h-11 w-full rounded-xl bg-white/5" />
-								<Skeleton className="mb-2 h-3 w-20 bg-white/5" />
-								<Skeleton className="mb-4 h-32 w-full rounded-xl bg-white/5" />
-								<Skeleton className="h-11 w-full rounded-xl" />
-							</div>
+							<CommentFormSkeleton />
 						</div>
 
 						{/* Divider for mobile only */}
 						<hr className="my-2 block border-white/10 lg:hidden" />
 
-						{/* More Posts Navigation skeleton */}
-						<section className="card-glass-dim rounded-3xl border border-white/10 p-6 sm:p-8">
-							<Skeleton className="mb-5 h-7 w-28" />
-							<ul className="flex flex-col gap-4">
-								{["sk-p1", "sk-p2", "sk-p3"].map((id) => (
-									<li key={id}>
-										<Skeleton className="h-4 w-4/5 bg-white/5" />
-									</li>
-								))}
-							</ul>
-						</section>
+						<MorePostsSkeleton />
 					</div>
 				</div>
 			</main>
