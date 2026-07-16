@@ -1,9 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import CommentForm from "@/components/CommentForm";
 import PostCardsLayout from "@/components/PostCardsLayout";
-import { Metadata } from "next";
 import { db } from "@/lib/db";
 import { verifySession } from "@/lib/session";
 
@@ -64,7 +64,9 @@ interface PostPageProps {
 	params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: PostPageProps): Promise<Metadata> {
 	const { slug } = await params;
 	const post = await db.query.posts
 		.findFirst({
@@ -75,19 +77,28 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
 	if (!post) {
 		return {
-			title: 'Post Not Found',
+			title: "Post Not Found",
 		};
 	}
 
-	const plainTextBody = post.body.replace(/<[^>]+>/g, '').substring(0, 160).trim();
+	const plainTextBody = post.body
+		.replace(/<[^>]+>/g, "")
+		.substring(0, 160)
+		.trim();
 
 	return {
 		title: post.title,
-		description: plainTextBody.length > 0 ? `${plainTextBody}...` : `Read ${post.title} on Loonary.`,
+		description:
+			plainTextBody.length > 0
+				? `${plainTextBody}...`
+				: `Read ${post.title} on Loonary.`,
 		openGraph: {
 			title: post.title,
-			description: plainTextBody.length > 0 ? `${plainTextBody}...` : `Read ${post.title} on Loonary.`,
-			type: 'article',
+			description:
+				plainTextBody.length > 0
+					? `${plainTextBody}...`
+					: `Read ${post.title} on Loonary.`,
+			type: "article",
 			publishedTime: post.createdAt.toISOString(),
 		},
 	};
