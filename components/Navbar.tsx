@@ -18,18 +18,18 @@ export default function Navbar() {
 	const closeMenu = () => setIsMenuOpen(false);
 
 	// Close drawer when route changes
-	// biome-ignore lint/correctness/useExhaustiveDependencies: close on route change
 	useEffect(() => {
-		closeMenu();
+		if (pathname) {
+			setIsMenuOpen(false);
+		}
 	}, [pathname]);
 
 	// Close drawer on outside click
-	// biome-ignore lint/correctness/useExhaustiveDependencies: menuRef is stable
 	useEffect(() => {
 		if (!isMenuOpen) return;
 		function handleClick(e: MouseEvent) {
 			if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-				closeMenu();
+				setIsMenuOpen(false);
 			}
 		}
 		document.addEventListener("mousedown", handleClick);

@@ -63,8 +63,7 @@ export default function PostEditor({ post }: { post?: Post }) {
 	);
 
 	const form = useForm<PostFormValues>({
-		// biome-ignore lint/suspicious/noExplicitAny: Zod 4 type compatibility with hookform resolvers
-		resolver: zodResolver(CreatePostSchema as any),
+		resolver: zodResolver(CreatePostSchema as never),
 		defaultValues: {
 			id: post?.id || "",
 			title: post?.title || "",

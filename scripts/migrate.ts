@@ -5,8 +5,7 @@ import { migrate } from "drizzle-orm/neon-http/migrator";
 
 config({ path: ".env.local" });
 
-// biome-ignore lint/style/noNonNullAssertion: guaranteed by environment
-const sql = neon(process.env.DATABASE_URL!);
+const sql = neon(process.env.DATABASE_URL as string);
 const db = drizzle(sql);
 
 async function runMigrate() {
