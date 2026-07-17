@@ -1,8 +1,21 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+export async function checkRateLimit(email: string) {
+	const attempt = await db.query.loginAttempts.findFirst({
+		where: eq(schema.loginAttempts.email, email),
+	});
+
+	if (attempt?.lockoutUntil && new Date() < attempt.lockoutUntil) {
+		const secondsLeft = Math.ceil(
+			(attempt.lockoutUntil.getTime() - Date.now()) / 1000,
+		);
+		return { locked: true, secondsLeft };
+	}
+	return { locked: false, secondsLeft: 0 };
+}
 
 export async function incrementFailedAttempt(email: string) {
 	const attempt = await db.query.loginAttempts.findFirst({
