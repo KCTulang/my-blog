@@ -4,6 +4,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
+import {
+	incrementFailedAttempt,
+	resetFailedAttempts,
+} from "@/app/actions/auth";
+
 export default function LoginForm() {
 	const [pending, setPending] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
@@ -23,15 +28,21 @@ export default function LoginForm() {
 			return;
 		}
 
+		const email = "admin@loonary.com";
+
 		const { error } = await authClient.signIn.email({
-			email: "admin@loonary.com",
+			email,
 			password,
 		});
 
 		if (error) {
+			if (error.message === "Invalid email or password") {
+				await incrementFailedAttempt(email);
+			}
 			setErrorMsg(error.message || "Incorrect password");
 			setPending(false);
 		} else {
+			await resetFailedAttempts(email);
 			router.push("/admin/posts");
 			router.refresh();
 		}
