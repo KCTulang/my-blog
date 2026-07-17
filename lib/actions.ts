@@ -229,6 +229,8 @@ export async function autoSavePost(
 		};
 	}
 
+	revalidatePath(`/blog/${result.data.slug}`);
+
 	return { success: true, id: postId ?? "" };
 }
 
