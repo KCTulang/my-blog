@@ -20,11 +20,11 @@ export const posts = pgTable("posts", {
 	deletedAt: timestamp("deleted_at"),
 });
 
-export const authAttempts = pgTable("auth_attempts", {
-	ip: text("ip").primaryKey(),
-	attempts: integer("attempts").notNull().default(0),
-	lockoutUntil: timestamp("lockout_until"),
-	lastAttemptAt: timestamp("last_attempt_at").defaultNow().notNull(),
+export const rateLimit = pgTable("rateLimit", {
+	id: text("id").primaryKey(),
+	key: text("key").notNull(),
+	count: integer("count").notNull(),
+	lastRequest: timestamp("lastRequest").notNull(),
 });
 
 export const comments = pgTable("comments", {
