@@ -57,6 +57,13 @@
 			"when": 1784261439907,
 			"tag": "0007_shiny_moira_mactaggert",
 			"breakpoints": true
+		},
+		{
+			"idx": 8,
+			"version": "7",
+			"when": 1784286398300,
+			"tag": "0008_chief_violations",
+			"breakpoints": true
 		}
 	]
 }

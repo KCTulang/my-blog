@@ -104,3 +104,9 @@ export const verification = pgTable("verification", {
 	createdAt: timestamp("createdAt"),
 	updatedAt: timestamp("updatedAt"),
 });
+
+export const loginAttempts = pgTable("loginAttempts", {
+	email: text("email").primaryKey(),
+	failedCount: integer("failedCount").notNull().default(0),
+	lockoutUntil: timestamp("lockoutUntil"),
+});
