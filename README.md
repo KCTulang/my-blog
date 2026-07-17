@@ -15,6 +15,17 @@ A full-stack blog built with **Next.js 16**, **Neon Postgres**, **Drizzle ORM v2
 
 ---
 
+## Features
+
+- [x] **Create & Read Posts:** A public blog list with individual post pages and tag filtering.
+- [x] **Interactive Comments:** Readers can leave comments on posts using smooth form submissions.
+- [x] **Moderation System:** Password-protected admin dashboard to approve or hide reader comments.
+- [x] **Admin Area:** Secure route for authors to write and publish new blog posts.
+- [x] **Optimized Performance:** Built with Next.js 16 App Router using Server Components, Skeleton loading states, and robust Zod validation.
+- [x] **Progressive Enhancement:** Forms use `useActionState` and Server Actions for snappy, interactive UX.
+
+---
+
 ## Getting Started
 
 ### 1. Clone & Install
@@ -117,13 +128,13 @@ drizzle/              # Committed SQL migration files (drizzle-kit generate)
 
 ## Key Constraints Met
 
-- ✅ **Drizzle ORM v2** (`drizzle-orm/neon-http`) — no raw SQL strings
-- ✅ **Server Actions** with `"use server"` — no `fetch()` POST from Client Components
-- ✅ **Zod `safeParse()`** in every Server Action
-- ✅ **`revalidatePath()`** called after every mutation
-- ✅ **`useActionState()`** for all forms — no `useState(loading)`
-- ✅ **`DATABASE_URL` in `.env.local`** — never committed
-- ✅ **SQL migration files in `drizzle/`** — `drizzle-kit generate` + manual apply
+- [x] **Drizzle ORM v2** (`drizzle-orm/neon-http`) — no raw SQL strings
+- [x] **Server Actions** with `"use server"` — no `fetch()` POST from Client Components
+- [x] **Zod `safeParse()`** in every Server Action
+- [x] **`revalidatePath()`** called after every mutation
+- [x] **`useActionState()`** for all forms — no `useState(loading)`
+- [x] **`DATABASE_URL` in `.env.local`** — never committed
+- [x] **SQL migration files in `drizzle/`** — `drizzle-kit generate` + manual apply
 
 ## Quality Checks
 
