@@ -174,6 +174,30 @@ export default function PostEditor({ post }: { post?: Post }) {
 		setIsPublishModalOpen(false);
 	};
 
+	const handlePreview = async (e: React.MouseEvent) => {
+		e.preventDefault();
+
+		const isValid = await form.trigger();
+		if (!isValid) return;
+
+		setIsAutoSaving(true);
+		const values = form.getValues();
+		const formData = buildFormData(values);
+		if (values.published) formData.append("published", values.published);
+
+		const result = await autoSavePost({ success: false }, formData);
+		setIsAutoSaving(false);
+
+		if (result.success) {
+			setLastSaved(new Date());
+			window.open(`/blog/${values.slug}`, "_blank");
+		} else {
+			toast.error(
+				result.errors?._form?.[0] || "Failed to save draft before preview",
+			);
+		}
+	};
+
 	return (
 		<>
 			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
@@ -277,14 +301,13 @@ export default function PostEditor({ post }: { post?: Post }) {
 							Save as Draft
 						</button>
 						{watchedValues.id && watchedValues.slug && (
-							<a
-								href={`/blog/${watchedValues.slug}`}
-								target="_blank"
-								rel="noreferrer"
+							<button
+								type="button"
+								onClick={handlePreview}
 								className="min-h-11 inline-flex items-center justify-center rounded-xl border border-white/15 bg-transparent px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10"
 							>
 								Preview
-							</a>
+							</button>
 						)}
 					</div>
 					<Link
