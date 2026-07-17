@@ -176,7 +176,7 @@ export default function PostEditor({ post }: { post?: Post }) {
 
 	const handlePreview = async (e: React.MouseEvent) => {
 		e.preventDefault();
-		
+
 		const isValid = await form.trigger();
 		if (!isValid) return;
 
@@ -187,12 +187,14 @@ export default function PostEditor({ post }: { post?: Post }) {
 
 		const result = await autoSavePost({ success: false }, formData);
 		setIsAutoSaving(false);
-		
+
 		if (result.success) {
 			setLastSaved(new Date());
 			window.open(`/blog/${values.slug}`, "_blank");
 		} else {
-			toast.error(result.errors?._form?.[0] || "Failed to save draft before preview");
+			toast.error(
+				result.errors?._form?.[0] || "Failed to save draft before preview",
+			);
 		}
 	};
 
